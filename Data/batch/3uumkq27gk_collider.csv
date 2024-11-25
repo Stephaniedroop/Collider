@@ -1,0 +1,25 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+3uumkq27gk,17884,222771,601492777b72a04ce67e2f6d,0,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,10%,70%,80%,50%,cook,1,1,1,0,,,stim,c5
+3uumkq27gk,41518,277056,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The main dish impressed the panel,,ans,c5
+3uumkq27gk,8397,291612,601492777b72a04ce67e2f6d,0,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,10%,50%,80%,50%,job,0,1,0,0,,,stim,c2
+3uumkq27gk,11175,315486,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The candidate did not have skill A,,ans,c2
+3uumkq27gk,1458,323769,601492777b72a04ce67e2f6d,1,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,50%,80%,50%,10%,job,0,1,1,1,,,stim,d3
+3uumkq27gk,16299,348022,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The candidate demonstrated skill B,,ans,d3
+3uumkq27gk,1350,354160,601492777b72a04ce67e2f6d,1,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,80%,50%,10%,50%,job,1,0,0,0,,,stim,c3
+3uumkq27gk,7742,369341,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The candidate did not have skill B,,ans,c3
+3uumkq27gk,6698,380161,601492777b72a04ce67e2f6d,1,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,50%,80%,50%,10%,job,1,1,0,0,,,stim,c4
+3uumkq27gk,8733,396786,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The candidate did not demonstrate skill A,,ans,c4
+3uumkq27gk,9875,416157,601492777b72a04ce67e2f6d,1,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,80%,50%,10%,50%,cook,1,1,1,1,,,stim,d7
+3uumkq27gk,17216,436995,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The chef completed the dessert,,ans,d7
+3uumkq27gk,2375,445761,601492777b72a04ce67e2f6d,1,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,80%,50%,10%,50%,cook,0,0,0,0,,,stim,c1
+3uumkq27gk,9843,460554,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The chef did not complete the main dish,,ans,c1
+3uumkq27gk,1309,466071,601492777b72a04ce67e2f6d,1,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,80%,50%,10%,70%,job,0,1,0,1,,,stim,d2
+3uumkq27gk,7460,475003,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The candidate did not have skill A,,ans,d2
+3uumkq27gk,1398,479081,601492777b72a04ce67e2f6d,1,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,80%,50%,10%,50%,group,0,0,0,1,,,stim,d1
+3uumkq27gk,10448,491595,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The lecturer did not attend,,ans,d1
+3uumkq27gk,1236,495295,601492777b72a04ce67e2f6d,0,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,50%,10%,50%,80%,cook,1,0,0,1,,,stim,d4
+3uumkq27gk,7519,505899,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The chef did not complete the dessert,,ans,d4
+3uumkq27gk,2449,512533,601492777b72a04ce67e2f6d,0,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,10%,50%,80%,50%,cook,1,0,1,1,,,stim,d5
+3uumkq27gk,3527,520778,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The main dish impressed the panel,,ans,d5
+3uumkq27gk,1561,525696,601492777b72a04ce67e2f6d,0,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,10%,50%,80%,50%,cook,1,1,0,1,,,stim,d6
+3uumkq27gk,8170,536201,601492777b72a04ce67e2f6d,,668582e30cf76773d7ac09c4,66858eb13b3bf66fccb1bc2c,,,,,,,,,,The main dish did not impress the panel,,ans,d6

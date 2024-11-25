@@ -1,0 +1,5 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+o7yuhrgc3m,965.2000000029802,85952,63664883bd43b09d8e805699,1,668582e30cf76773d7ac09c4,66858bf0663cc6127bdc09f7,50%,80%,50%,10%,cook,0,1,0,1,,,stim,d2
+o7yuhrgc3m,25976.79999999702,115006,63664883bd43b09d8e805699,,668582e30cf76773d7ac09c4,66858bf0663cc6127bdc09f7,,,,,,,,,,The chef completed the main dish,,ans,d2
+o7yuhrgc3m,1515.5,119034,63664883bd43b09d8e805699,0,668582e30cf76773d7ac09c4,66858bf0663cc6127bdc09f7,10%,50%,80%,50%,job,1,1,1,1,,,stim,d7
+o7yuhrgc3m,17504.29999999702,138670,63664883bd43b09d8e805699,,668582e30cf76773d7ac09c4,66858bf0663cc6127bdc09f7,,,,,,,,,,The candidate had skill B,,ans,d7

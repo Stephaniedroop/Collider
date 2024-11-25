@@ -1,0 +1,61 @@
+,subject_id,cb,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+1,2qyx86efes,0,10%,50%,80%,50%,job,0,1,0,1,The candidate did not demonstrate skill B,NA,,d2
+4,2qyx86efes,0,50%,10%,50%,80%,job,0,0,0,1,The candidate did not have skill B,NA,,d1
+7,2qyx86efes,1,80%,50%,10%,70%,job,1,0,0,1,The candidate did not demonstrate skill A,NA,,d4
+10,2qyx86efes,0,10%,70%,80%,50%,cook,0,1,1,1,The dessert impressed the panel,NA,,d3
+13,2qyx86efes,1,80%,50%,10%,50%,job,1,1,0,1,The candidate did not demonstrate skill A,NA,,d6
+16,2qyx86efes,1,50%,80%,50%,10%,group,0,1,0,0,The postdoc did not talk about the paper,NA,,c2
+19,2qyx86efes,1,80%,50%,10%,70%,job,1,1,1,1,The candidate demonstrated skill B,NA,,d7
+22,2qyx86efes,1,80%,50%,10%,50%,group,0,0,0,0,The lecturer did not attend,NA,,c1
+25,2qyx86efes,0,10%,70%,80%,50%,job,1,1,0,0,The candidate did not demonstrate skill A,NA,,c4
+28,2qyx86efes,0,10%,50%,80%,50%,job,1,1,1,0,The candidate demonstrated skill A,NA,,c5
+31,2qyx86efes,0,10%,50%,80%,50%,group,1,0,1,1,The lecturer talked about the paper,NA,,d5
+34,2qyx86efes,0,10%,70%,80%,50%,job,1,0,0,0,The candidate did not have skill B,NA,,c3
+38,840f1ghp1u,0,10%,70%,80%,50%,group,0,1,0,0,The postdoc did not talk about the paper,NA,,c2
+41,840f1ghp1u,1,80%,50%,10%,70%,group,1,1,0,0,The lecturer did not talk about the paper,NA,,c4
+44,840f1ghp1u,1,50%,80%,50%,10%,group,0,0,0,1,The lecturer did not attend,NA,,d1
+47,840f1ghp1u,1,80%,50%,10%,50%,group,1,1,1,0,The lecturer talked about the paper,NA,,c5
+50,840f1ghp1u,0,10%,50%,80%,50%,job,1,0,0,1,The candidate did not demonstrate skill A,NA,,d4
+53,840f1ghp1u,1,80%,50%,10%,50%,job,1,0,1,1,The candidate demonstrated skill A,NA,,d5
+56,840f1ghp1u,0,10%,50%,80%,50%,cook,0,0,0,0,The chef did not complete the main dish,NA,,c1
+59,840f1ghp1u,1,80%,50%,10%,50%,group,0,1,1,1,The postdoc talked about the paper,NA,,d3
+62,840f1ghp1u,0,10%,50%,80%,50%,group,1,0,0,0,The lecturer did not talk about the paper,NA,,c3
+65,840f1ghp1u,1,80%,50%,10%,50%,job,1,1,1,1,The candidate demonstrated skill B,NA,,d7
+68,840f1ghp1u,1,50%,80%,50%,10%,group,1,1,0,1,The lecturer did not talk about the paper,NA,,d6
+71,840f1ghp1u,1,80%,50%,10%,50%,group,0,1,0,1,The postdoc did not talk about the paper,NA,,d2
+75,8xukceoqq5,1,80%,50%,10%,70%,job,0,1,0,0,The candidate did not demonstrate skill A,NA,,c2
+78,8xukceoqq5,1,80%,50%,10%,50%,cook,0,1,0,1,The main dish did not impress the panel,NA,,d2
+81,8xukceoqq5,0,50%,10%,50%,80%,cook,1,0,1,1,The main dish impressed the panel,NA,,d5
+84,8xukceoqq5,0,10%,70%,80%,50%,group,1,1,1,0,The lecturer talked about the paper,NA,,c5
+87,8xukceoqq5,0,10%,70%,80%,50%,group,0,0,0,0,The lecturer did not attend,NA,,c1
+90,8xukceoqq5,0,10%,50%,80%,50%,job,1,1,0,1,The candidate did not demonstrate skill A,NA,,d6
+93,8xukceoqq5,0,50%,10%,50%,80%,group,1,1,1,1,The lecturer talked about the paper,NA,,d7
+96,8xukceoqq5,1,80%,50%,10%,50%,job,1,1,0,0,The candidate did not demonstrate skill A,NA,,c4
+99,8xukceoqq5,0,10%,50%,80%,50%,group,0,0,0,1,The postdoc did not attend,NA,,d1
+102,8xukceoqq5,0,10%,50%,80%,50%,group,1,0,0,0,The postdoc did not attend,NA,,c3
+105,8xukceoqq5,1,80%,50%,10%,70%,cook,1,0,0,1,The main dish did not impress the panel,NA,,d4
+108,8xukceoqq5,0,50%,10%,50%,80%,cook,0,1,1,1,The dessert impressed the panel,NA,,d3
+112,9daxphva6d,1,50%,80%,50%,10%,job,0,1,1,1,The candidate demonstrated skill B,NA,,d3
+115,9daxphva6d,1,50%,80%,50%,10%,cook,0,0,0,0,The dessert did not impress the panel,NA,,c1
+118,9daxphva6d,0,10%,50%,80%,50%,group,1,0,0,1,The postdoc did not attend,NA,,d4
+121,9daxphva6d,1,80%,50%,10%,50%,cook,1,1,1,0,The dessert impressed the panel,NA,,c5
+124,9daxphva6d,0,10%,50%,80%,50%,group,1,1,0,0,The lecturer did not attend,NA,,c4
+127,9daxphva6d,0,10%,70%,80%,50%,group,1,0,0,0,The postdoc did not attend,NA,,c3
+130,9daxphva6d,1,50%,80%,50%,10%,cook,1,1,1,1,The dessert impressed the panel,NA,,d7
+133,9daxphva6d,1,80%,50%,10%,70%,job,1,1,0,1,The candidate did not demonstrate skill A,NA,,d6
+136,9daxphva6d,0,10%,50%,80%,50%,group,0,0,0,1,The postdoc did not attend,NA,,d1
+139,9daxphva6d,0,10%,70%,80%,50%,cook,0,1,0,0,The chef did not complete the main dish,NA,,c2
+142,9daxphva6d,1,80%,50%,10%,50%,group,0,1,0,1,The lecturer did not attend,NA,,d2
+145,9daxphva6d,1,80%,50%,10%,50%,job,1,0,1,1,The candidate demonstrated skill A,NA,,d5
+149,xpy8oy64la,0,50%,10%,50%,80%,job,1,1,1,1,The candidate demonstrated skill B,NA,,d7
+152,xpy8oy64la,0,10%,50%,80%,50%,job,1,0,0,1,The candidate demonstrated skill A,NA,,d4
+155,xpy8oy64la,1,80%,50%,10%,70%,job,0,0,0,1,The candidate did not have skill A,NA,,d1
+158,xpy8oy64la,0,50%,10%,50%,80%,cook,1,0,1,1,The main dish impressed the panel,NA,,d5
+161,xpy8oy64la,0,10%,70%,80%,50%,group,0,1,0,0,The lecturer did not attend,NA,,c2
+164,xpy8oy64la,0,50%,10%,50%,80%,cook,1,1,0,1,The main dish did not impress the panel,NA,,d6
+167,xpy8oy64la,1,80%,50%,10%,70%,job,1,1,1,0,The candidate demonstrated skill B,NA,,c5
+170,xpy8oy64la,0,10%,70%,80%,50%,group,0,1,1,1,The postdoc talked about the paper,NA,,d3
+173,xpy8oy64la,1,50%,80%,50%,10%,job,1,0,0,0,The candidate demonstrated skill A,NA,,c3
+176,xpy8oy64la,0,50%,10%,50%,80%,cook,1,1,0,0,The dessert did not impress the panel,NA,,c4
+179,xpy8oy64la,1,80%,50%,10%,70%,group,0,1,0,1,The postdoc did not talk about the paper,NA,,d2
+182,xpy8oy64la,0,10%,50%,80%,50%,group,0,0,0,0,The postdoc did not attend,NA,,c1

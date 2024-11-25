@@ -1,0 +1,17 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+osxt71odeh,980.5999999940395,42648,,0,,,10%,50%,80%,50%,cook,0,0,0,0,,,stim,c1
+osxt71odeh,3297.5,47650,,,,,,,,,,,,,,The dessert impressed the panel,,ans,c1
+osxt71odeh,1282,54605,,0,,,10%,70%,80%,50%,job,1,1,1,0,,,stim,c5
+osxt71odeh,10788.300000011921,66829,,,,,,,,,,,,,,The candidate had skill B,,ans,c5
+osxt71odeh,819.3000000119209,75901,,0,,,10%,70%,80%,50%,cook,1,0,0,1,,,stim,d4
+osxt71odeh,3015.2000000178814,80635,,,,,,,,,,,,,,The chef did not complete the main dish,,ans,d4
+osxt71odeh,980.7999999821186,85487,,1,,,80%,50%,10%,50%,job,0,1,1,1,,,stim,d3
+osxt71odeh,2365.9000000059605,89689,,,,,,,,,,,,,,The candidate did not have skill A,,ans,d3
+osxt71odeh,965.5,94226,,0,,,50%,10%,50%,80%,group,1,0,0,0,,,stim,c3
+osxt71odeh,2837.199999988079,99063,,,,,,,,,,,,,,The postdoc talked about the paper,,ans,c3
+osxt71odeh,847.8999999761581,104648,,0,,,50%,10%,50%,80%,group,0,1,0,0,,,stim,c2
+osxt71odeh,2635.600000023842,108920,,,,,,,,,,,,,,The lecturer talked about the paper,,ans,c2
+osxt71odeh,816.3000000119209,114052,,1,,,80%,50%,10%,70%,cook,1,1,1,1,,,stim,d7
+osxt71odeh,2397.7999999821186,117922,,,,,,,,,,,,,,The main dish impressed the panel,,ans,d7
+osxt71odeh,917.7000000178814,126576,,0,,,10%,50%,80%,50%,cook,1,1,0,0,,,stim,c4
+osxt71odeh,2649.5,130979,,,,,,,,,,,,,,The chef completed the dessert,,ans,c4

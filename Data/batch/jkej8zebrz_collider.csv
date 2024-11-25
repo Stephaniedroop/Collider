@@ -1,0 +1,25 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+jkej8zebrz,17020.5,628390,63d13b5acde8f0843d3ddddc,0,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,50%,10%,50%,80%,group,1,0,0,1,,,stim,d4
+jkej8zebrz,22004.299999952316,674662,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The lecturer did not talk about the paper,,ans,d4
+jkej8zebrz,7851.5,692460,63d13b5acde8f0843d3ddddc,0,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,50%,10%,50%,80%,group,1,0,1,1,,,stim,d5
+jkej8zebrz,12430.099999904633,719066,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The lecturer talked about the paper,,ans,d5
+jkej8zebrz,2181.600000143051,729720,63d13b5acde8f0843d3ddddc,0,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,50%,10%,50%,80%,group,1,1,1,1,,,stim,d7
+jkej8zebrz,28776.60000014305,765608,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The postdoc talked about the paper,,ans,d7
+jkej8zebrz,1585.3999998569489,771098,63d13b5acde8f0843d3ddddc,0,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,50%,10%,50%,80%,group,0,1,1,1,,,stim,d3
+jkej8zebrz,4915.5,781672,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The postdoc talked about the paper,,ans,d3
+jkej8zebrz,1338.2000000476837,786296,63d13b5acde8f0843d3ddddc,0,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,50%,10%,50%,80%,group,1,1,0,0,,,stim,c4
+jkej8zebrz,19450.200000047684,815861,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The lecturer did not talk about the paper,,ans,c4
+jkej8zebrz,20800.200000047684,874261,63d13b5acde8f0843d3ddddc,0,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,10%,70%,80%,50%,cook,0,0,0,1,,,stim,d1
+jkej8zebrz,24108,942604,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The chef did not complete the dessert,,ans,d1
+jkej8zebrz,10709.100000143051,958815,63d13b5acde8f0843d3ddddc,0,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,10%,50%,80%,50%,group,1,1,0,1,,,stim,d6
+jkej8zebrz,23106.400000095367,993027,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The postdoc did not talk about the paper,,ans,d6
+jkej8zebrz,4578.200000047684,1002938,63d13b5acde8f0843d3ddddc,1,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,80%,50%,10%,50%,cook,0,1,0,1,,,stim,d2
+jkej8zebrz,5511.5,1028251,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The dessert did not impress the panel,,ans,d2
+jkej8zebrz,13791.700000047684,1048310,63d13b5acde8f0843d3ddddc,1,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,80%,50%,10%,50%,job,0,1,0,0,,,stim,c2
+jkej8zebrz,3271.7999999523163,1068605,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The candidate did not have skill A,,ans,c2
+jkej8zebrz,13026.900000095367,1085290,63d13b5acde8f0843d3ddddc,0,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,50%,10%,50%,80%,cook,1,0,0,0,,,stim,c3
+jkej8zebrz,11451.799999952316,1105562,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The chef did not complete the dessert,,ans,c3
+jkej8zebrz,3036.5,1111626,63d13b5acde8f0843d3ddddc,0,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,10%,50%,80%,50%,cook,0,0,0,0,,,stim,c1
+jkej8zebrz,4308.400000095367,1124192,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The chef did not complete the dessert,,ans,c1
+jkej8zebrz,3441.5,1130481,63d13b5acde8f0843d3ddddc,0,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,50%,10%,50%,80%,job,1,1,1,0,,,stim,c5
+jkej8zebrz,9055.799999952316,1146997,63d13b5acde8f0843d3ddddc,,668582e30cf76773d7ac09c4,66859012ce4139a6c68ec92d,,,,,,,,,,The candidate demonstrated skill A,,ans,c5

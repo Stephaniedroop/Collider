@@ -1,0 +1,25 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+9h6lqmnnke,6903,145943,5f498ed174ace851abbbdee9,1,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,50%,80%,50%,10%,group,0,1,1,1,,,stim,d3
+9h6lqmnnke,16201,173999,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The postdoc attended,,ans,d3
+9h6lqmnnke,7525,203241,5f498ed174ace851abbbdee9,0,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,10%,50%,80%,50%,group,1,1,1,1,,,stim,d7
+9h6lqmnnke,18274,231052,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The postdoc talked about the paper,,ans,d7
+9h6lqmnnke,15690,261879,5f498ed174ace851abbbdee9,0,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,10%,50%,80%,50%,cook,1,1,1,0,,,stim,c5
+9h6lqmnnke,12706,286428,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The main dish impressed the panel,,ans,c5
+9h6lqmnnke,7272,312849,5f498ed174ace851abbbdee9,1,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,50%,80%,50%,10%,job,0,0,0,1,,,stim,d1
+9h6lqmnnke,18562,338543,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The candidate did not have skill A,,ans,d1
+9h6lqmnnke,5330,349052,5f498ed174ace851abbbdee9,0,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,10%,50%,80%,50%,cook,1,0,0,1,,,stim,d4
+9h6lqmnnke,5047,360457,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The chef did not complete the dessert,,ans,d4
+9h6lqmnnke,3463,373061,5f498ed174ace851abbbdee9,0,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,50%,10%,50%,80%,job,1,0,0,0,,,stim,c3
+9h6lqmnnke,4605,383068,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The candidate did not have skill B,,ans,c3
+9h6lqmnnke,14478,401398,5f498ed174ace851abbbdee9,0,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,50%,10%,50%,80%,cook,1,1,0,1,,,stim,d6
+9h6lqmnnke,6792,420068,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The main dish did not impress the panel,,ans,d6
+9h6lqmnnke,4569,435306,5f498ed174ace851abbbdee9,1,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,80%,50%,10%,50%,job,1,0,1,1,,,stim,d5
+9h6lqmnnke,4649,449766,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The candidate demonstrated skill A,,ans,d5
+9h6lqmnnke,26572,510316,5f498ed174ace851abbbdee9,1,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,80%,50%,10%,70%,group,1,1,0,0,,,stim,c4
+9h6lqmnnke,9872,528327,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The lecturer did not talk about the paper,,ans,c4
+9h6lqmnnke,6176,538959,5f498ed174ace851abbbdee9,0,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,10%,50%,80%,50%,cook,0,0,0,0,,,stim,c1
+9h6lqmnnke,5680,549082,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The chef did not complete the main dish,,ans,c1
+9h6lqmnnke,7902,562445,5f498ed174ace851abbbdee9,0,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,10%,50%,80%,50%,group,0,1,0,0,,,stim,c2
+9h6lqmnnke,3764,571637,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The lecturer did not attend,,ans,c2
+9h6lqmnnke,7688,589637,5f498ed174ace851abbbdee9,1,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,80%,50%,10%,50%,job,0,1,0,1,,,stim,d2
+9h6lqmnnke,4331,599059,5f498ed174ace851abbbdee9,,668582e30cf76773d7ac09c4,6685911081f49a0e64a5f63c,,,,,,,,,,The candidate did not demonstrate skill B,,ans,d2

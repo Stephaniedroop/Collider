@@ -1,0 +1,25 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+zu9mcekfp9,29437.19999998808,323913,60dddeb5c0b25cd6ab9d1b03,0,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,50%,10%,50%,80%,group,1,0,0,0,,,stim,c3
+zu9mcekfp9,11828.60000000894,347165,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The lecturer did not talk about the paper,,ans,c3
+zu9mcekfp9,12950.29999999702,373060,60dddeb5c0b25cd6ab9d1b03,0,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,10%,50%,80%,50%,cook,1,1,0,1,,,stim,d6
+zu9mcekfp9,13999.40000000596,395899,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The dessert did not impress the panel,,ans,d6
+zu9mcekfp9,9106.79999999702,413196,60dddeb5c0b25cd6ab9d1b03,1,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,80%,50%,10%,50%,cook,0,0,0,1,,,stim,d1
+zu9mcekfp9,7340.300000011921,424798,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The chef did not complete the main dish,,ans,d1
+zu9mcekfp9,4285,433388,60dddeb5c0b25cd6ab9d1b03,0,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,10%,50%,80%,50%,cook,1,1,1,1,,,stim,d7
+zu9mcekfp9,10747.40000000596,451678,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The dessert impressed the panel,,ans,d7
+zu9mcekfp9,9684.29999999702,464645,60dddeb5c0b25cd6ab9d1b03,0,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,10%,70%,80%,50%,cook,1,1,0,0,,,stim,c4
+zu9mcekfp9,13512,486066,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The dessert did not impress the panel,,ans,c4
+zu9mcekfp9,2935.2999999970198,492182,60dddeb5c0b25cd6ab9d1b03,1,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,80%,50%,10%,50%,cook,1,0,0,1,,,stim,d4
+zu9mcekfp9,2474.2000000029802,505034,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The main dish did not impress the panel,,ans,d4
+zu9mcekfp9,5141.300000011921,513796,60dddeb5c0b25cd6ab9d1b03,0,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,50%,10%,50%,80%,cook,0,1,0,1,,,stim,d2
+zu9mcekfp9,2227.5,523087,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The dessert did not impress the panel,,ans,d2
+zu9mcekfp9,6239.5,532658,60dddeb5c0b25cd6ab9d1b03,1,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,80%,50%,10%,50%,job,1,1,1,0,,,stim,c5
+zu9mcekfp9,11135.10000000894,554042,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The candidate demonstrated skill A,,ans,c5
+zu9mcekfp9,7736,564346,60dddeb5c0b25cd6ab9d1b03,1,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,50%,80%,50%,10%,cook,0,0,0,0,,,stim,c1
+zu9mcekfp9,5975.5,577849,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The chef did not complete the main dish,,ans,c1
+zu9mcekfp9,6357.20000000298,587129,60dddeb5c0b25cd6ab9d1b03,0,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,50%,10%,50%,80%,group,1,0,1,1,,,stim,d5
+zu9mcekfp9,3891.0999999940395,599098,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The lecturer talked about the paper,,ans,d5
+zu9mcekfp9,7860,609727,60dddeb5c0b25cd6ab9d1b03,0,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,10%,50%,80%,50%,cook,0,1,0,0,,,stim,c2
+zu9mcekfp9,2758.5,619219,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The chef did not complete the main dish,,ans,c2
+zu9mcekfp9,5498.29999999702,629582,60dddeb5c0b25cd6ab9d1b03,1,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,50%,80%,50%,10%,job,0,1,1,1,,,stim,d3
+zu9mcekfp9,2516.4000000059605,636989,60dddeb5c0b25cd6ab9d1b03,,668582e30cf76773d7ac09c4,668590a7c30ba93ed3c22d6e,,,,,,,,,,The candidate demonstrated skill B,,ans,d3

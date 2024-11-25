@@ -1,0 +1,4 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+r662jp8no4,30383.899999976158,320338,6658b4676af4776cecc985b8,1,668582e30cf76773d7ac09c4,668592ff4eb5e20d847b7a70,80%,50%,10%,70%,group,0,1,0,1,,,stim,d2
+r662jp8no4,54178.10000002384,387064,6658b4676af4776cecc985b8,,668582e30cf76773d7ac09c4,668592ff4eb5e20d847b7a70,,,,,,,,,,The lecturer talked about the paper,,ans,d2
+r662jp8no4,11045.399999976158,406826,6658b4676af4776cecc985b8,0,668582e30cf76773d7ac09c4,668592ff4eb5e20d847b7a70,50%,10%,50%,80%,cook,1,1,0,1,,,stim,d6

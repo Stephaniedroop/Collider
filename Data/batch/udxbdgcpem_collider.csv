@@ -1,0 +1,25 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+udxbdgcpem,20231,240180,6620d90870c71835f4f55ccb,1,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,50%,80%,50%,10%,group,1,1,0,1,,,stim,d6
+udxbdgcpem,37936,307186,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The lecturer did not talk about the paper,,ans,d6
+udxbdgcpem,6134,322417,6620d90870c71835f4f55ccb,0,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,50%,10%,50%,80%,group,0,1,1,1,,,stim,d3
+udxbdgcpem,7116,348964,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The postdoc talked about the paper,,ans,d3
+udxbdgcpem,22633.99999999994,380548,6620d90870c71835f4f55ccb,1,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,80%,50%,10%,70%,job,0,0,0,0,,,stim,c1
+udxbdgcpem,18835,424049,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The candidate did not have skill A,,ans,c1
+udxbdgcpem,1196,430030,6620d90870c71835f4f55ccb,0,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,10%,50%,80%,50%,job,1,0,1,1,,,stim,d5
+udxbdgcpem,3883,452249,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The candidate demonstrated skill A,,ans,d5
+udxbdgcpem,3783.000000000058,459114,6620d90870c71835f4f55ccb,0,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,50%,10%,50%,80%,job,1,0,0,1,,,stim,d4
+udxbdgcpem,4697,481999,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The candidate did not demonstrate skill A,,ans,d4
+udxbdgcpem,4615,491498,6620d90870c71835f4f55ccb,1,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,50%,80%,50%,10%,group,1,1,1,1,,,stim,d7
+udxbdgcpem,3200,515732,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The lecturer talked about the paper,,ans,d7
+udxbdgcpem,2140,521305,6620d90870c71835f4f55ccb,0,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,10%,50%,80%,50%,job,1,1,1,0,,,stim,c5
+udxbdgcpem,3332.0000000001164,531448,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The candidate demonstrated skill B,,ans,c5
+udxbdgcpem,883,534981,6620d90870c71835f4f55ccb,0,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,10%,70%,80%,50%,job,0,1,0,0,,,stim,c2
+udxbdgcpem,3352.0000000001164,567798,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The candidate did not demonstrate skill B,,ans,c2
+udxbdgcpem,2166.9999999998836,572465,6620d90870c71835f4f55ccb,0,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,10%,70%,80%,50%,group,0,1,0,1,,,stim,d2
+udxbdgcpem,14713,589866,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The postdoc did not talk about the paper,,ans,d2
+udxbdgcpem,11133,604248,6620d90870c71835f4f55ccb,0,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,50%,10%,50%,80%,cook,1,1,0,0,,,stim,c4
+udxbdgcpem,14900,622082,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The dessert did not impress the panel,,ans,c4
+udxbdgcpem,983,625215,6620d90870c71835f4f55ccb,1,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,80%,50%,10%,70%,group,0,0,0,1,,,stim,d1
+udxbdgcpem,27948,654982,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The lecturer did not attend,,ans,d1
+udxbdgcpem,966,662799,6620d90870c71835f4f55ccb,0,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,10%,50%,80%,50%,cook,1,0,0,0,,,stim,c3
+udxbdgcpem,36034,700534,6620d90870c71835f4f55ccb,,668582e30cf76773d7ac09c4,66858f43d2e34e2aeed95cc9,,,,,,,,,,The main dish did not impress the panel,,ans,c3

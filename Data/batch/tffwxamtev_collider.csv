@@ -1,0 +1,24 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+tffwxamtev,9729,161726,66842e3ae6052e7c40b7bb4d,1,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,80%,50%,10%,70%,group,1,0,0,0,,,stim,c3
+tffwxamtev,27223,208249,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The postdoc did not attend,,ans,c3
+tffwxamtev,9029,227490,66842e3ae6052e7c40b7bb4d,1,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,80%,50%,10%,50%,group,1,0,1,1,,,stim,d5
+tffwxamtev,5983,240092,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The lecturer attended,,ans,d5
+tffwxamtev,335906,582106,66842e3ae6052e7c40b7bb4d,1,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,80%,50%,10%,70%,job,0,1,1,1,,,stim,d3
+tffwxamtev,9441,599524,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The candidate had skill B,,ans,d3
+tffwxamtev,87101,694681,66842e3ae6052e7c40b7bb4d,1,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,50%,80%,50%,10%,job,0,0,0,0,,,stim,c1
+tffwxamtev,54493,757468,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The candidate did not have skill A,,ans,c1
+tffwxamtev,6141,771641,66842e3ae6052e7c40b7bb4d,1,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,50%,80%,50%,10%,group,0,1,0,0,,,stim,c2
+tffwxamtev,17091,794315,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The lecturer did not attend,,ans,c2
+tffwxamtev,4462,803015,66842e3ae6052e7c40b7bb4d,1,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,80%,50%,10%,50%,group,1,0,0,1,,,stim,d4
+tffwxamtev,18532.999999999884,828992,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The lecturer did not talk about the paper,,ans,d4
+tffwxamtev,2974,835448,66842e3ae6052e7c40b7bb4d,1,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,80%,50%,10%,70%,group,1,1,1,1,,,stim,d7
+tffwxamtev,8711,849028,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The postdoc talked about the paper,,ans,d7
+tffwxamtev,19846,895581,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The lecturer did not talk about the paper,,ans,d6
+tffwxamtev,1036,901426,66842e3ae6052e7c40b7bb4d,1,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,50%,80%,50%,10%,group,0,0,0,1,,,stim,d1
+tffwxamtev,11748.000000000116,917426,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The lecturer did not attend,,ans,d1
+tffwxamtev,1297,921736,66842e3ae6052e7c40b7bb4d,1,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,80%,50%,10%,50%,group,1,1,0,0,,,stim,c4
+tffwxamtev,15874,943837,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The postdoc did not talk about the paper,,ans,c4
+tffwxamtev,1757.0000000001164,949160,66842e3ae6052e7c40b7bb4d,0,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,10%,50%,80%,50%,cook,1,1,1,0,,,stim,c5
+tffwxamtev,15407,972687,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The dessert impressed the panel,,ans,c5
+tffwxamtev,4175,980193,66842e3ae6052e7c40b7bb4d,0,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,50%,10%,50%,80%,group,0,1,0,1,,,stim,d2
+tffwxamtev,3602,995745,66842e3ae6052e7c40b7bb4d,,668582e30cf76773d7ac09c4,668590dead2f7083a2f83e80,,,,,,,,,,The postdoc did not talk about the paper,,ans,d2

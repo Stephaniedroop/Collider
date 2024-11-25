@@ -1,0 +1,25 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+espcowrjxs,9621,153247,5caa178ffd086000016dd2d3,1,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,80%,50%,10%,70%,job,1,1,1,1,,,stim,d7
+espcowrjxs,15258,181026,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The candidate demonstrated skill A,,ans,d7
+espcowrjxs,9555.899999976158,236297,5caa178ffd086000016dd2d3,1,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,50%,80%,50%,10%,group,0,0,0,0,,,stim,c1
+espcowrjxs,12889.199999988079,261829,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The lecturer did not attend,,ans,c1
+espcowrjxs,3496.900000035763,319116,5caa178ffd086000016dd2d3,1,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,50%,80%,50%,10%,group,1,1,1,0,,,stim,c5
+espcowrjxs,7072.300000011921,331429,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The lecturer talked about the paper,,ans,c5
+espcowrjxs,2812.2000000476837,339823,5caa178ffd086000016dd2d3,0,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,10%,50%,80%,50%,job,1,0,1,1,,,stim,d5
+espcowrjxs,5886.199999988079,354129,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The candidate demonstrated skill B,,ans,d5
+espcowrjxs,2670.100000023842,360492,5caa178ffd086000016dd2d3,0,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,10%,50%,80%,50%,job,1,0,0,0,,,stim,c3
+espcowrjxs,11286.100000023842,378828,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The candidate had skill A,,ans,c3
+espcowrjxs,22002.80000001192,404370,5caa178ffd086000016dd2d3,0,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,50%,10%,50%,80%,group,0,1,1,1,,,stim,d3
+espcowrjxs,4820.099999964237,415864,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The postdoc talked about the paper,,ans,d3
+espcowrjxs,1573.0999999642372,424768,5caa178ffd086000016dd2d3,1,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,80%,50%,10%,70%,job,1,0,0,1,,,stim,d4
+espcowrjxs,7583.399999976158,437154,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The candidate had skill A,,ans,d4
+espcowrjxs,1760.800000011921,447061,5caa178ffd086000016dd2d3,0,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,10%,70%,80%,50%,cook,0,0,0,1,,,stim,d1
+espcowrjxs,6941,459184,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The chef did not complete the dessert,,ans,d1
+espcowrjxs,1700.1000000238419,465550,5caa178ffd086000016dd2d3,0,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,10%,50%,80%,50%,cook,1,1,0,0,,,stim,c4
+espcowrjxs,8369.100000023842,477921,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The chef completed the main dish,,ans,c4
+espcowrjxs,2191.899999976158,482717,5caa178ffd086000016dd2d3,1,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,80%,50%,10%,70%,group,0,1,0,1,,,stim,d2
+espcowrjxs,5939.599999964237,493282,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The postdoc talked about the paper,,ans,d2
+espcowrjxs,976,497475,5caa178ffd086000016dd2d3,1,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,50%,80%,50%,10%,cook,1,1,0,1,,,stim,d6
+espcowrjxs,5494.400000035763,504703,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The chef completed the main dish,,ans,d6
+espcowrjxs,881.1000000238419,508314,5caa178ffd086000016dd2d3,1,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,50%,80%,50%,10%,cook,0,1,0,0,,,stim,c2
+espcowrjxs,5298.199999988079,515062,5caa178ffd086000016dd2d3,,668582e30cf76773d7ac09c4,668591c7eff4e89fdee87bec,,,,,,,,,,The chef completed the dessert,,ans,c2

@@ -1,0 +1,5 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+sp2exc0g1d,24545.40000000596,319272,5d2df58a481c4b001d16250d,0,668582e30cf76773d7ac09c4,66858f62e0095b5af2c22cd2,10%,70%,80%,50%,group,1,0,0,0,,,stim,c3
+sp2exc0g1d,30091.09999999404,387272,5d2df58a481c4b001d16250d,,668582e30cf76773d7ac09c4,66858f62e0095b5af2c22cd2,,,,,,,,,,The postdoc did not attend,,ans,c3
+sp2exc0g1d,7872.899999976158,402709,5d2df58a481c4b001d16250d,1,668582e30cf76773d7ac09c4,66858f62e0095b5af2c22cd2,50%,80%,50%,10%,group,0,0,0,0,,,stim,c1
+sp2exc0g1d,16318.699999988079,432202,5d2df58a481c4b001d16250d,,668582e30cf76773d7ac09c4,66858f62e0095b5af2c22cd2,,,,,,,,,,The lecturer did not attend,,ans,c1

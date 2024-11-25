@@ -1,0 +1,169 @@
+---
+title: "Combine participant data with model predictions"
+output: html_document
+date: "2024-10-01"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggnewscale)
+rm(list=ls())
+
+# Read in processed ppt data
+load('../Data/Data.Rdata', verbose = T) # This is one big df, 'data'
+# and model data
+mp <- read.csv('../model_data/tidied_preds.csv') # 480 obs of 25
+```
+
+A repeat of `combine_ppt_with_preds.R`, only in .Rmd. Hidden code takes inputs of preprocessed participant data and model predictions, summarises and normalises both, and plots for each of the 3 parameter settings.
+
+```{r, echo=FALSE}
+mp$pgroup <- as.factor(mp$pgroup)
+mp$node3 <- as.factor(mp$node3)
+mp$trialtype <- as.factor(mp$trialtype)
+
+# Summarise mp and normalise with %
+modelNorm <- mp %>% # 288 of 5
+  group_by(pgroup, trialtype, node3, .drop = FALSE) %>% 
+  #ungroup(realLat) %>% 
+  summarise(predicted = sum(wa)) %>% 
+  mutate(normpred = predicted/sum(predicted)) # 288 seems ok
+
+# An odd little way to bring in realLat status, must be a better way
+modelPlaceholder <- mp %>% # 72 of 5
+  na.omit() %>% 
+  group_by(pgroup, trialtype, node3, realLat, .drop = FALSE) %>% 
+  tally
+
+# For realLat, everything TRUE has been defined as such. 
+# Everything else needs to be FALSE (currently some are na because we used .drop=F to get all the combinations).
+modelPlaceholder <- modelPlaceholder %>% replace(is.na(.), FALSE) %>% select(-n)
+
+modelNorm <- merge(modelNorm, modelPlaceholder)
+
+# First set factors so we can use tally
+data$pgroup <- as.factor(data$pgroup)
+data$node3 <- as.factor(data$node3)
+data$trialtype <- as.factor(data$trialtype)
+
+dataNorm <- data %>% # 
+  group_by(pgroup, trialtype, node3, .drop=FALSE) %>% 
+  tally %>% 
+  mutate(prop=n/sum(n))
+  
+# 576 of 6 -- CLOSEST THING TO SINGLE PREDICTION PER NODE/EXPLANATION 
+combNorm <- merge(x=dataNorm, y=modelNorm) %>% 
+  select(-predicted, -n) %>% 
+  rename(cesm=normpred, ppts=prop) %>% 
+  pivot_longer(cols = cesm:ppts, values_to = 'percent')
+  
+fulltrialspec <- c('Conj: A=0, B=0, | E=0',
+                   'Conj: A=0, B=1, | E=0',
+                   'Conj: A=1, B=0, | E=0',
+                   'Conj: A=1, B=1, | E=0',
+                   'Conj: A=1, B=1, | E=1',
+                   'Disj: A=0, B=0, | E=0',
+                   'Disj: A=0, B=1, | E=0',
+                   'Disj: A=0, B=1, | E=1', 
+                   'Disj: A=1, B=0, | E=0', 
+                   'Disj: A=1, B=0, | E=1', 
+                   'Disj: A=1, B=1, | E=0', 
+                   'Disj: A=1, B=1, | E=1')
+
+# They follow the order:
+# c1: 000 
+# c2: 010
+# c3: 100
+# c4: 110
+# c5: 111
+# d1: 000
+# d2: 010
+# d3: 011
+# d4: 100
+# d5: 101
+# d6: 110
+# d7: 111
+
+# Which can conveniently is alphanumeric and be mapped using unique vals from the trialtype factor
+trialvalsvec <- as.vector(unique(data$trialtype)) %>% sort() 
+
+# Probgroup 1
+p1 <- combNorm %>% 
+  filter(pgroup == '1') %>% 
+  ggplot(aes(x = node3, y = percent,
+                     fill = node3)) +
+  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) + #, scales='free_x'
+  geom_col(data = filter(combNorm, name=='ppts' & pgroup=='1'), alpha=0.4) +
+  new_scale_color() +
+  geom_point(data = filter(combNorm, name=='cesm' & pgroup=='1'), 
+             aes(shape = realLat, colour = realLat), size=2) + 
+  scale_color_brewer(name=waiver(), palette = 'Dark2', direction = -1) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  guides(fill = guide_legend(override.aes = list(size = 0, alpha=0.4))) +
+  labs(x='Node', y=NULL, fill='Explanation \nselected as \nbest by y% of \nparticipants', 
+       title = 'Parameter group 1) .1, .5, .8, .5',
+       subtitle = 'Participant choice (bars) against weighted average \nCESM model prediction (dots)')
+
+p1
+
+# Probgroup 2
+p2 <- combNorm %>% 
+  filter(pgroup == '2') %>% 
+  ggplot(aes(x = node3, y = percent,
+             fill = node3)) +
+  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) + #, scales='free_x'
+  geom_col(data = filter(combNorm, name=='ppts' & pgroup=='2'), alpha=0.4) +
+  new_scale_color() +
+  geom_point(data = filter(combNorm, name=='cesm' & pgroup=='2'), 
+             aes(shape = realLat, colour = realLat), size=2) + 
+  scale_color_brewer(name=waiver(), palette = 'Dark2', direction = -1) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  guides(fill = guide_legend(override.aes = list(size = 0, alpha=0.4))) +
+  labs(x='Node', y=NULL, fill='Explanation \nselected as \nbest by y% of \nparticipants', 
+       title = 'Parameter group 2) .5, .1, .5, .8',
+       subtitle = 'Participant choice (bars) against weighted average \nCESM model prediction (dots)')
+
+p2
+
+# Probgroup 3
+p3 <- combNorm %>% 
+  filter(pgroup == '3') %>% 
+  ggplot(aes(x = node3, y = percent,
+             fill = node3)) +
+  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) + #, scales='free_x'
+  geom_col(data = filter(combNorm, name=='ppts' & pgroup=='3'), alpha=0.4) +
+  new_scale_color() +
+  geom_point(data = filter(combNorm, name=='cesm' & pgroup=='3'), 
+             aes(shape = realLat, colour = realLat), size=2) + 
+  scale_color_brewer(name=waiver(), palette = 'Dark2', direction = -1) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  guides(fill = guide_legend(override.aes = list(size = 0, alpha=0.4))) +
+  labs(x='Node', y=NULL, fill='Explanation \nselected as \nbest by y% of \nparticipants', 
+       title = 'Parameter group 3) .1, .7, .8, .5',
+       subtitle = 'Participant choice (bars) against weighted average \nCESM model prediction (dots)')
+
+p3
+
+# One for the scatter plot - same as combNorm but not pivoted longer
+combNorm2 <- merge(x=dataNorm, y=modelNorm) %>% 
+  select(-predicted, -n) %>% 
+  rename(cesm=normpred, ppts=prop)
+
+# Scatter of correlation
+scatter <- ggplot(combNorm2, aes(x = ppts, y = cesm, shape = node3, color = trialtype)) +
+  scale_shape_manual(values = 18:25) +
+  geom_point(size=2) + # aes(shape = node3, color = trialtype)
+  theme_bw() +
+  guides(shape = guide_legend(override.aes = list(size = 5))) + # Makes key symbols bigger
+  labs(x = 'Participants', y = 'Counterfactual effect size',
+       title = 'Normalised participant choices against model scores, cor=.78',
+       subtitle = 'Three probability groups per point type')
+scatter
+
+# Note: still haven't done correlation overall for model fit: it is
+cor(combNorm2$ppts, combNorm2$cesm) # ie 0.788
+```

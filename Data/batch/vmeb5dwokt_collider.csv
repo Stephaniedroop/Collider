@@ -1,0 +1,25 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+vmeb5dwokt,36503,573834,62b2d042ae6609abd802aa95,1,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,80%,50%,10%,70%,job,1,1,0,0,,,stim,c4
+vmeb5dwokt,174323,783402,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The candidate did not demonstrate skill B,,ans,c4
+vmeb5dwokt,39775,833719,62b2d042ae6609abd802aa95,0,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,10%,70%,80%,50%,job,1,1,0,1,,,stim,d6
+vmeb5dwokt,97494,965368,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The candidate did not demonstrate skill A,,ans,d6
+vmeb5dwokt,18818,999756,62b2d042ae6609abd802aa95,0,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,10%,70%,80%,50%,group,0,1,0,1,,,stim,d2
+vmeb5dwokt,33178,1058374,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The postdoc did not talk about the paper,,ans,d2
+vmeb5dwokt,19854,1086983,62b2d042ae6609abd802aa95,0,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,50%,10%,50%,80%,job,1,0,0,1,,,stim,d4
+vmeb5dwokt,13368,1127004,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The candidate did not demonstrate skill A,,ans,d4
+vmeb5dwokt,14141,1152491,62b2d042ae6609abd802aa95,1,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,50%,80%,50%,10%,group,0,1,1,1,,,stim,d3
+vmeb5dwokt,23447,1192474,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The postdoc talked about the paper,,ans,d3
+vmeb5dwokt,17905,1223165,62b2d042ae6609abd802aa95,1,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,50%,80%,50%,10%,job,0,0,0,1,,,stim,d1
+vmeb5dwokt,49740,1293357,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The candidate did not demonstrate skill A,,ans,d1
+vmeb5dwokt,18871,1321209,62b2d042ae6609abd802aa95,0,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,10%,70%,80%,50%,job,1,1,1,0,,,stim,c5
+vmeb5dwokt,30204,1376432,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The candidate demonstrated skill B,,ans,c5
+vmeb5dwokt,13343,1398958,62b2d042ae6609abd802aa95,1,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,80%,50%,10%,50%,group,1,1,1,1,,,stim,d7
+vmeb5dwokt,7839,1423246,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The lecturer talked about the paper,,ans,d7
+vmeb5dwokt,24521,1454256,62b2d042ae6609abd802aa95,0,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,50%,10%,50%,80%,job,1,0,0,0,,,stim,c3
+vmeb5dwokt,14807,1485264,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The candidate did not demonstrate skill B,,ans,c3
+vmeb5dwokt,10510,1502890,62b2d042ae6609abd802aa95,0,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,50%,10%,50%,80%,group,0,0,0,0,,,stim,c1
+vmeb5dwokt,25044,1549836,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The postdoc did not attend,,ans,c1
+vmeb5dwokt,7622,1564160,62b2d042ae6609abd802aa95,0,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,50%,10%,50%,80%,group,1,0,1,1,,,stim,d5
+vmeb5dwokt,11413,1591220,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The lecturer talked about the paper,,ans,d5
+vmeb5dwokt,8620,1604568,62b2d042ae6609abd802aa95,1,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,80%,50%,10%,50%,group,0,1,0,0,,,stim,c2
+vmeb5dwokt,11496,1635215,62b2d042ae6609abd802aa95,,668582e30cf76773d7ac09c4,668591277be348fec5f1cb78,,,,,,,,,,The postdoc did not talk about the paper,,ans,c2

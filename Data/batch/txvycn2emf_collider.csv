@@ -1,0 +1,4 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+txvycn2emf,11865,272888,5a270517b4a5de00011af15c,0,668582e30cf76773d7ac09c4,668591c10bfb0051239510d7,50%,10%,50%,80%,cook,1,1,1,0,,,stim,c5
+txvycn2emf,21047,319003,5a270517b4a5de00011af15c,,668582e30cf76773d7ac09c4,668591c10bfb0051239510d7,,,,,,,,,,The dessert impressed the panel,,ans,c5
+txvycn2emf,7217.799999713898,336015,5a270517b4a5de00011af15c,0,668582e30cf76773d7ac09c4,668591c10bfb0051239510d7,10%,70%,80%,50%,group,1,0,1,1,,,stim,d5

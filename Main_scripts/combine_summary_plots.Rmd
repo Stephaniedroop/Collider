@@ -1,0 +1,222 @@
+# Collider analysis summary plots
+
+This script takes the processed data from the collider participant experiment and combines it with the preprocessed model predictions to generate summary plots. 
+
+The plots shows proportions of participants and model choosing a 'Real Latent' explanation, meaning an unobserved variable whose value cannot be logically determined, aka it could have taken more than one value.
+
+The last one shows the proportion of trials on which participants selected an answer 'ConnectedWith' A, ie. A or Au, as opposed to B or Bu.
+
+
+```{r, include=FALSE}
+rm(list=ls())
+library(tidyverse)
+load('../Data/Data.Rdata', verbose = T) # This is one big df, 'data'
+mp <- read.csv('../model_data/tidied_preds2.csv') # 
+```
+
+### Divvying up the ppt data 
+
+This section calculates the numbers and proportions of participants choosing a RealLatent explanation, and also calculates the proportion of trials on which participants selected an answer 'ConnectedWith' A, ie. A or Au, as opposed to B or Bu. 
+
+To see how these variables were defined, go to script `mainbatch_preprocessing.R`.
+
+```{r, include=FALSE}
+dataPropsLat <- data %>% # 72 of 4
+  group_by(pgroup) %>% 
+  complete(trialtype, realLat) %>% 
+  group_by(pgroup, trialtype, realLat) %>% 
+  summarise(n=n()) %>% 
+  mutate(prop = n/sum(n))
+
+dataPropsLatnott <- data %>% # 6 of 4
+  group_by(pgroup) %>% 
+  complete(trialtype, realLat) %>% 
+  group_by(pgroup, realLat) %>% 
+  summarise(n=n()) %>% 
+  mutate(prop = n/sum(n))
+
+dataPropsVar <- data %>% 
+  group_by(pgroup, trialtype, connectedWith) %>% 
+  summarise(n=n()) %>% 
+  mutate(prop = n/sum(n)) # 72 of 5
+```
+
+### Divvying up the model predictions 
+
+Now we slice up the model predictions in the same way.
+
+```{r, include=FALSE}
+modelPropsLat <- mp %>% # 72 of 5
+  na.omit() %>% 
+  group_by(pgroup) %>% 
+  complete(trialtype, realLat) %>% 
+  group_by(pgroup, trialtype, realLat) %>% 
+  summarise(predicted = sum(wa)) %>% 
+  replace(is.na(.), 0) %>% 
+  mutate(normpred = predicted/sum(predicted))
+  
+modelPropsLatnott <- mp %>% # 6 of 4
+  na.omit() %>% 
+  group_by(pgroup, realLat) %>% 
+  summarise(predicted = sum(wa)) %>% 
+  replace(is.na(.), 0) %>% 
+  mutate(normpred = predicted/sum(predicted))
+
+modelPropsVar <- mp %>% # 72 of 5
+  group_by(pgroup, trialtype, connectedWith) %>% 
+  summarise(predicted = sum(wa)) %>% 
+  mutate(normpred = predicted/sum(predicted))# 72 of 5
+```
+
+
+### Set factors 
+
+This section defines the variables pgroup and trialtype as factors. Trialtype in particular needs levels and labels to de defined so that plots with facets can have meaningful labels showing the actual values of the observed variables A and B, and whether the outcome (effect) happened or not, and also whether the world was a conjunctive or disjunctive setting.
+
+```{r, include=FALSE}
+# Set pgroup as factor
+dataPropsLat$pgroup <- as.factor(dataPropsLat$pgroup)
+modelPropsLat$pgroup <- as.factor(modelPropsLat$pgroup)
+dataPropsVar$pgroup <- as.factor(dataPropsVar$pgroup)
+modelPropsVar$pgroup <- as.factor(modelPropsVar$pgroup)
+dataPropsLatnott$pgroup <- as.factor(dataPropsLatnott$pgroup)
+modelPropsLatnott$pgroup <- as.factor(modelPropsLatnott$pgroup)
+
+
+# Set trialtype as factor
+
+# We want to put conj and disc trialtypes on the same plot. But the names 'c1' etc are not informative
+# So we need a vector of the spec for the labels:
+
+fulltrialspec <- c('Disj: A=1, B=1, | E=1',
+                   'Disj: A=1, B=1, | E=0',
+                   'Disj: A=1, B=0, | E=1',
+                   'Disj: A=1, B=0, | E=0',
+                   'Disj: A=0, B=1, | E=1',
+                   'Disj: A=0, B=1, | E=0',
+                   'Disj: A=0, B=0, | E=0',
+                   'Conj: A=1, B=1, | E=1',
+                   'Conj: A=1, B=1, | E=0',
+                   'Conj: A=1, B=0, | E=0',
+                   'Conj: A=0, B=1, | E=0',
+                   'Conj: A=0, B=0, | E=0')
+
+# They should be:
+# c1: 000 
+# c2: 010
+# c3: 100
+# c4: 110
+# c5: 111
+# d1: 000
+# d2: 010
+# d3: 011
+# d4: 100
+# d5: 101
+# d6: 110
+# d7: 111
+
+trialvalsvec <- as.vector(unique(data$trialtype)) %>% sort(decreasing = TRUE)
+
+# Set trialtype as factor
+dataPropsLat$trialtype <- factor(dataPropsLat$trialtype, levels = trialvalsvec, labels = fulltrialspec)
+modelPropsLat$trialtype <- factor(modelPropsLat$trialtype, levels = trialvalsvec, labels = fulltrialspec)
+dataPropsVar$trialtype <- factor(dataPropsVar$trialtype, levels = trialvalsvec, labels = fulltrialspec)
+modelPropsVar$trialtype <- factor(modelPropsVar$trialtype, levels = trialvalsvec, labels = fulltrialspec)
+```
+
+
+### Combine model and ppt data  
+
+This section combines the summary dataframes of proportions defined above, for:
+a) proportion choosing realLat and 
+b) proportion choosing A v B
+
+
+```{r, include=FALSE}
+combPropsLat <- merge(x = modelPropsLat, y = dataPropsLat, all.x = T) %>% 
+  select(-predicted, -n) %>% 
+  rename(cesm=normpred, ppts=prop) %>% 
+  pivot_longer(cols = cesm:ppts, values_to = 'percent')
+
+combPropsVar <- merge(x = modelPropsVar, y = dataPropsVar, all.x = T) %>% 
+  select(-predicted, -n) %>% 
+  rename(cesm=normpred, ppts=prop) %>% 
+  pivot_longer(cols = cesm:ppts, values_to = 'percent') %>% 
+  na.omit()
+
+combLatnott <- merge(x = modelPropsLatnott, y = dataPropsLatnott, all.x = T) %>% 
+  select(-predicted, -n) %>% 
+  rename(cesm=normpred, ppts=prop) %>% 
+  pivot_longer(cols = cesm:ppts, values_to = 'percent') %>% 
+  na.omit()
+```
+
+### Stats
+```{r}
+x <- combLatnott %>% 
+  filter(realLat==TRUE)
+
+```
+
+
+### Plotting
+
+The first three plots show the percent of explanations which are 'Real Latent'. The first of these is proportion overall, the second is split out by probability setting, and the third is split out by trial type or world setting. The fourth plot shows the percent of the time participants chose an explanation involving A, over one involving B.
+```{r, include=FALSE}
+# A string showing the probability parameters in each setting. It's here so it can be easily changed, then we put it as the subtitel of each plot.
+settingstring <- 'Settings: p(A==1), p(Au==1), p(B==1), p(Bu==1) \n1) .1, .5, .8, .5 \n2) .5, .1, .5, .8 \n3) .1, .7, .8, .5'
+
+
+p1 <- combLatnott %>% 
+  filter(realLat==TRUE) %>% 
+  ggplot(aes(x = name, y = percent)) +
+  geom_bar(stat= 'identity', position = 'dodge') +
+  #facet_wrap(~trialtype) +
+  theme_classic() +
+  labs(fill = 'Settings', 
+       title = "Percent choosing 'Real Latent' explanation")
+
+
+# 2. Split out the probgroups 
+p2 <- combLatnott %>% 
+  filter(realLat==TRUE) %>% 
+  ggplot(aes(fill = pgroup, x = name, y = percent)) +
+  geom_bar(stat= 'identity', position = 'dodge') +
+  #facet_wrap(~trialtype) +
+  theme_classic() +
+  labs(fill = 'Settings', 
+       title = "Percent choosing 'Real Latent' explanation",
+       subtitle = settingstring)
+
+
+p3 <- combPropsLat %>% 
+  filter(realLat==TRUE) %>% 
+  ggplot(aes(fill = pgroup, x = name, y = percent)) +
+  facet_wrap(~trialtype) +
+  geom_bar(stat= 'identity', position = 'dodge') +
+  theme_classic() +
+  labs(fill = 'Settings', 
+       title = "Percent choosing 'Real Latent' explanation",
+       subtitle = settingstring)
+
+
+p4 <- combPropsVar %>% 
+  filter(connectedWith=='A') %>% 
+  ggplot(aes(fill = pgroup, x = name, y = percent)) +
+  geom_bar(stat= 'identity', position = 'dodge') +
+  facet_wrap(~trialtype) +
+  theme_classic() +
+  labs(fill = 'Settings', 
+       title = 'Percent choosing explanation A|Au (as opposed to B|Bu) ',
+       subtitle = settingstring)
+
+p2
+```
+
+```{r}
+p1
+p2
+p3
+p4
+```
+

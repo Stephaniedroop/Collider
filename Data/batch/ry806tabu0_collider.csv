@@ -1,0 +1,25 @@
+subject_id,rt,time_elapsed,prolific_id,cb,study_id,session_id,prob0,prob1,prob2,prob3,scenario,A,B,E,S,answer,comments,rowtype,trialtype
+ry806tabu0,23059.09999999404,363385,6658bfdffc0ff7bc3cf89ef6,0,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,10%,50%,80%,50%,job,1,0,0,0,,,stim,c3
+ry806tabu0,32379.30000001192,418120,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The candidate did not have skill B,,ans,c3
+ry806tabu0,9962,436873,6658bfdffc0ff7bc3cf89ef6,0,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,10%,70%,80%,50%,job,1,1,1,0,,,stim,c5
+ry806tabu0,47388.5,499206,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The candidate demonstrated skill A,,ans,c5
+ry806tabu0,11840.299999982119,524793,6658bfdffc0ff7bc3cf89ef6,0,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,10%,50%,80%,50%,group,1,1,0,1,,,stim,d6
+ry806tabu0,42250.40000000596,596208,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The lecturer did not talk about the paper,,ans,d6
+ry806tabu0,7432,609522,6658bfdffc0ff7bc3cf89ef6,1,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,50%,80%,50%,10%,job,0,1,1,1,,,stim,d3
+ry806tabu0,33329.30000001192,652761,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The candidate demonstrated skill B,,ans,d3
+ry806tabu0,12703,672225,6658bfdffc0ff7bc3cf89ef6,0,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,50%,10%,50%,80%,job,0,1,0,1,,,stim,d2
+ry806tabu0,44352.19999998808,729412,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The candidate did not have skill A,,ans,d2
+ry806tabu0,15384.09999999404,759058,6658bfdffc0ff7bc3cf89ef6,0,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,50%,10%,50%,80%,cook,1,1,1,1,,,stim,d7
+ry806tabu0,23587.5,804706,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The main dish impressed the panel,,ans,d7
+ry806tabu0,15481,837218,6658bfdffc0ff7bc3cf89ef6,0,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,10%,50%,80%,50%,job,1,0,0,1,,,stim,d4
+ry806tabu0,36254.60000002384,887436,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The candidate did not demonstrate skill A,,ans,d4
+ry806tabu0,7071.699999988079,899384,6658bfdffc0ff7bc3cf89ef6,1,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,80%,50%,10%,50%,cook,1,0,1,1,,,stim,d5
+ry806tabu0,14928.5,921323,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The main dish impressed the panel,,ans,d5
+ry806tabu0,2494.600000023842,930865,6658bfdffc0ff7bc3cf89ef6,0,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,50%,10%,50%,80%,group,0,0,0,1,,,stim,d1
+ry806tabu0,20571.19999998808,959010,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The postdoc did not attend,,ans,d1
+ry806tabu0,2803.4000000059605,970041,6658bfdffc0ff7bc3cf89ef6,0,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,10%,50%,80%,50%,group,0,0,0,0,,,stim,c1
+ry806tabu0,4606.0999999940395,989336,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The postdoc did not attend,,ans,c1
+ry806tabu0,6741.4000000059605,1003128,6658bfdffc0ff7bc3cf89ef6,1,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,80%,50%,10%,50%,group,0,1,0,0,,,stim,c2
+ry806tabu0,22711.79999998212,1042653,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The postdoc did not talk about the paper,,ans,c2
+ry806tabu0,3566.9000000059605,1053737,6658bfdffc0ff7bc3cf89ef6,0,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,10%,50%,80%,50%,group,1,1,0,0,,,stim,c4
+ry806tabu0,16973.5,1079210,6658bfdffc0ff7bc3cf89ef6,,668582e30cf76773d7ac09c4,66858bdc98b08e9eaf971a62,,,,,,,,,,The postdoc did not talk about the paper,,ans,c4
