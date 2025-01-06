@@ -2,100 +2,141 @@
 title: "Visualise participants against model predictions for stability parameter `r params$s`"
 output: html_document
 date: "2024-10-10"
-params: 
-  stab: 0.7
+params:
+  s: NA
+  #stab: 0.7
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 # Script takes the processed data from the collider ppt expt (`DATA.RDATA`)
 # (which was cleaned and sliced in `mainbatch_preprocessing.R`) 
-# and combines it with the preprocessed model predictions from `modpred_preprocessing.R` (`tidied_preds.csv`)
+# and combines it with the preprocessed model predictions from `modpred_process_allmodules.R` (`tidied_preds.csv`)
 ```
 
-This code combines participant and model predictions at stability parameter `r params$stab`.
-
-## How to read these charts
-
-The blue dotted line in the plots is a baseline of 12.5%, that is, the chance level of a participant choosing any variable (they were permitted to choose any).
-
-The red dashed line is a much more conservative baseline of equal choice between only those answers that were coherent with actual causation, i.e., if the outcome was 0 in a disjunctive setting, when A was 1 and B was 0, then the only two coherent explanations for outcome 0 are Au=0 and B=0, as it is meaningless for Bu to have any value when B=0, and we know Au=0 because otherwise the effect would have occurred. There are always two coherent explanations, except for when both A and B occurred and the outcome occurred, when there are four (shown by red dashed line at 0.25 in those conditions).
-
-Incoherent answers were permitted and were occasionally chosen by participants, but these bars are shown very faintly.
+This code combines participant and model predictions at stability parameter `r params$s`. 
 
 ```{r, include=FALSE}
 load('../Data/Data.Rdata', verbose = T) # This is one big df, 'data', 3408 obs of 18 ie. 284 ppts
-mod <- read.csv('../model_data/tidied_preds2.csv') # 82656 of 31 , 110208 if 4 params
-mod$s <- as.character(mod$s)
 
-mp <- mod[mod$s %in% params$stab, ]
+# These for when each rmd was loading the whole dataset. Now we are trying to do it separately
+#mod <- read.csv('../model_data/tidied_preds3.csv') # 82656 of 31 , 110208 if 4 params
+#mod$s <- as.character(mod$s)
+#mp <- mod[mod$s %in% params$stab, ]
+
+load(file = paste0(s,'.rdata'))
+
+mp <- d 
 
 mp$pgroup <- as.factor(mp$pgroup)
 mp$node3 <- as.factor(mp$node3)
 mp$trialtype <- as.factor(mp$trialtype)
-#mp$structure <- as.factor(mp$structure)
+mp$sens <- as.factor(mp$sens)
+mp$structure <- as.factor(mp$structure)
+mp$E <- as.factor(mp$E)
 
-# Take the mean of the 10 runs for each world setting, get conditional and weighted average
+# ACTUAL CAUSATION - still to treat for
+
+# all$A_cp[all$vA!=all$E] <- 0
+# all$Au_cp[all$vAu!=all$E] <- 0
+# all$B_cp[all$vB!=all$E] <- 0
+# all$Bu_cp[all$vBu!=all$E] <- 0
+
+
+
+
+# Take the mean of the 10 runs for each world setting, get conditional and weighted average OLD VERSION WITHOUT E
+# modelNorm <- mp %>%  # 384
+#   group_by(sens, pgroup, trialtype, node3, uAuB, cond, .drop = FALSE) %>% # guess it's ok to not have .drop=F
+#   summarise(meancesm = mean(cp)) %>%  # take the mean of the 10 model runs
+#   mutate(intermed = meancesm*cond) %>% 
+#   group_by(sens, pgroup, trialtype, node3) %>% 
+#   summarise(wa = sum(intermed)) %>% 
+#   mutate(normed = wa/sum(wa, na.rm = T))
+
+# For scatter to see if grouping falls naturally when by E. This way doesn't give all combos (ie gives NAs) but ok here? NEW VERSION WITH E used to called modelNOrm 
 modelNorm <- mp %>%  # 384
-  group_by(pgroup, trialtype, structure, node3, uAuB, cond, .drop = FALSE) %>% # it brings 4 back in
+  group_by(sens, pgroup, trialtype, E, node3, uAuB, cond) %>% # guess it's ok to not have .drop=F
   summarise(meancesm = mean(cp)) %>%  # take the mean of the 10 model runs
   mutate(intermed = meancesm*cond) %>% 
-  group_by(pgroup, trialtype, structure, node3) %>% 
-  #filter(pgroup!='4') %>% # NOT FILTERING!!!!
+  group_by(sens, pgroup, trialtype, E, node3) %>% 
   summarise(wa = sum(intermed)) %>% 
   mutate(normed = wa/sum(wa, na.rm = T))
 
-modelNorm0 <- mp %>% # just pgroup4
-  filter(pgroup=='4') %>% # 
-  group_by(trialtype, structure, node3, uAuB, cond, .drop = FALSE) %>% 
-  summarise(meancesm = mean(cp)) %>% 
-  mutate(intermed = meancesm*cond) %>% 
-  group_by(trialtype, structure, node3) %>% # Now 288
-  summarise(wa = sum(intermed)) %>% 
-  mutate(normed = wa/sum(wa, na.rm = T))
 
+
+
+#modelNorm <- modelNorm %>% fill(structure)
+
+# NOT CHECKED FOR SENS
+# Might not need this now we have sensitivity param
+# modelNorm0 <- mp %>% # just pgroup4
+#   filter(pgroup=='4') %>% # 
+#   group_by(trialtype, structure, node3, uAuB, cond, .drop = FALSE) %>% 
+#   summarise(meancesm = mean(cp)) %>% 
+#   mutate(intermed = meancesm*cond) %>% 
+#   group_by(trialtype, structure, node3) %>% # Now 288
+#   summarise(wa = sum(intermed)) %>% 
+#   mutate(normed = wa/sum(wa, na.rm = T))
+
+# NOT CHECKED FOR SENS
 # But we also need a version that keeps all the unobserved variables - 480 obs
-modelNorm2 <- mp %>% # 480 of 5 (cos separate value for each uAuB)
-  filter(pgroup!='4') %>% 
-  group_by(pgroup, trialtype, node3, uAuB, cond, .drop = FALSE) %>% 
-  summarise(meancesm = mean(cp)) %>% 
-  # intermed is the thing that is added together to get the wa. Currently unnormalised
-  mutate(intermed = meancesm*cond) %>% 
-  mutate(temp = max(uAuB))
+# modelNorm2 <- mp %>% # 480 of 5 (cos separate value for each uAuB)
+#   filter(pgroup!='4') %>% 
+#   group_by(pgroup, trialtype, node3, uAuB, cond, .drop = FALSE) %>% 
+#   summarise(meancesm = mean(cp)) %>% 
+#   # intermed is the thing that is added together to get the wa. Currently unnormalised
+#   mutate(intermed = meancesm*cond) %>% 
+#   mutate(temp = max(uAuB))
   
 
 # ---- Redoing the vis --------
 # (Need to redo the vis where all dots are shown....)
  
-modelNorm4 <- mp %>% # 288 of 5
-  filter(pgroup!='4') %>% 
-  group_by(pgroup, trialtype, node3, uAuB, .drop = FALSE) %>% 
-  summarise(predicted = mean(wa)) %>% # TO DO - what happens if it is mean??
-  mutate(normpred = predicted/sum(predicted))
+# modelNorm4 <- mp %>% # 288 of 5
+#   filter(pgroup!='4') %>% 
+#   group_by(pgroup, trialtype, node3, uAuB, .drop = FALSE) %>% 
+#   summarise(predicted = mean(wa)) %>% # TO DO - what happens if it is mean??
+#   mutate(normpred = predicted/sum(predicted))
 
 # predicted is the same as wa2 from 5. When this then gets summed, it gives the unnormalised model prediction (ie for pg1, d7, A=1 is 0.34. This then normalises later)
 
 
-modelNorm5 <- mp %>% # 288 of 5 argh 996 - is this because of uAuB?
-  filter(pgroup!='4') %>% 
-  group_by(pgroup, trialtype, cond, node3, uAuB, .drop = FALSE) %>% 
-  summarise(predicted = sum(wa)) #%>% # NOT this got stuck 18 Nov and not sure where I left it - some plots now not working
+# modelNorm5 <- mp %>% # 288 of 5 argh 996 - is this because of uAuB?
+#   filter(pgroup!='4') %>% 
+#   group_by(pgroup, trialtype, cond, node3, uAuB, .drop = FALSE) %>% 
+#   summarise(predicted = sum(wa)) #%>% # NOT this got stuck 18 Nov and not sure where I left it - some plots now not working
   #mutate(wa2 = forplot*cond) #%>% # TO DO - what happens if it is mean??
   #mutate(normpred = predicted/sum(predicted))
 
 # An odd little way to bring in realLat status, must be a better way
 modelPlaceholder <- mp %>% 
-  #filter(pgroup!='4') %>% # It is not removing pgroup==4, very anmoying
   na.omit() %>% 
-  group_by(pgroup, trialtype, structure, node3, realLat, .drop = FALSE) %>% 
+  group_by(sens, pgroup, trialtype, node3, realLat, isLat, .drop = FALSE) %>% 
   tally
+
+# modelPlaceholder2 <- mp %>% 
+#   na.omit() %>% 
+#   group_by(sens, pgroup, trialtype, node3, realLat, isLat, .drop = FALSE) %>% 
+#   tally
+
 
 # For realLat, everything TRUE has been defined as such. 
 # Everything else needs to be FALSE (currently some are na because we used .drop=F to get all the combinations).
 modelPlaceholder <- modelPlaceholder %>% replace(is.na(.), FALSE) %>% select(-n)
+#modelPlaceholder2 <- modelPlaceholder2 %>% replace(is.na(.), FALSE) %>% select(-n)
 
 modelNorm <- merge(modelNorm, modelPlaceholder)
-modelNorm0 <- merge(modelNorm0, modelPlaceholder)
+modelNorm <- modelNorm[, c(2:4, 6:9, 5, 1)]
+#modelNorm2 <- merge(modelNorm, modelPlaceholder2)
+#modelNorm0 <- merge(modelNorm0, modelPlaceholder)
+
+# Put a column with structure - for some reason it doesn't have
+modelNorm <- modelNorm %>% 
+  mutate(structure = if_else(grepl("^c", trialtype), 'conjunctive', 'disjunctive'),
+         vartype = if_else(grepl(c("^Au|^Bu"), node3), 'un', 'obs'),
+         a1 = if_else(trialtype %in% c('c5', 'd7'), 'TRUE', 'FALSE'),
+         inf = if_else(realLat=='FALSE' & isLat=='TRUE', 'TRUE', 'FALSE'))
 
 
 # ------------- 2. Summarise participant data in same format ---------------------
@@ -130,32 +171,40 @@ dataNorm <- merge(x=dataNorm, y=dataPlaceholder, all.x = T) %>% replace(is.na(.)
 
 
 # ----------- 3. The actual merge! ------------ 
-# 576 of 7 -- CLOSEST THING TO SINGLE PREDICTION PER NODE/EXPLANATION 
-combNorm <- merge(x=dataNorm, y=modelNorm) %>% 
+# A longer version, where both cesm and ppts are long, by '%'
+combNorm <- merge(x=dataNorm, y=modelNorm) %>% # , by=c('pgroup', 'trialtype', 'node3')
   select(-wa, -n) %>% # Probably don't remove - need for lik
-  rename(cesm=normed, ppts=prop) %>% 
+  rename(cesm=normed, ppts=prop) %>%
   pivot_longer(cols = cesm:ppts, values_to = 'percent')
 
-# One for the scatter plot
+# One for the scatter plots: a bit wider
 combNorm2 <- merge(x=dataNorm, y=modelNorm) %>% 
   select(-wa, -n) %>% 
   rename(cesm=normed, ppts=prop) %>% 
   filter(isPerm==TRUE)
 
+# The same as combNorm2 except it uses placeholder2 which is isLat instead of realLat
+# combNorm3 <- merge(x=dataNorm, y=modelNorm2) %>% 
+#   select(-wa, -n) %>% 
+#   rename(cesm=normed, ppts=prop) %>% 
+#   filter(isPerm==TRUE)
+
+
+
 # For params4 scatter
-combNormScat <- merge(x=dataNorm, y=modelNorm0) %>% 
-  select(-wa, -n) %>% 
-  rename(cesm=normed, ppts=prop) %>% # can't remember why we had to have isPerm=T (to remove the many 0s?) but it gives smaller corr so more prudent
-  filter(isPerm==TRUE)
+# combNormScat <- merge(x=dataNorm, y=modelNorm0) %>% 
+#   select(-wa, -n) %>% 
+#   rename(cesm=normed, ppts=prop) %>% # can't remember why we had to have isPerm=T (to remove the many 0s?) but it gives smaller corr so more prudent
+#   filter(isPerm==TRUE)
 
 # For by-facet correlations
-combNorm3 <- merge(x=dataNorm, y=modelNorm) %>% 
-  select(-wa, -n) %>% 
-  rename(cesm=normed, ppts=prop) 
+# combNorm3 <- merge(x=dataNorm, y=modelNorm) %>% 
+#   select(-wa, -n) %>% 
+#   rename(cesm=normed, ppts=prop) 
 
 # A version for NLL 
-combNLL <- merge(x=dataNorm, y=modelNorm) %>% 
-  select(-isPerm, -realLat)
+# combNLL <- merge(x=dataNorm, y=modelNorm) %>% 
+#   select(-isPerm, -realLat)
 
 # save this as csv if you want it elsewhere
 #write.csv(combNorm, 'combNorm.csv')
@@ -200,108 +249,168 @@ fulltrialspec <- c('Disj: A=1, B=1, | E=1',
 trialvalsvec <- as.vector(levels(mp$trialtype)) %>% sort(decreasing = TRUE)
 ```
 
-## Model predictions are made up of...
-Weighted averages of each probability group - here is group 1
 
-```{r, echo=FALSE, warning=FALSE}
-p71 <- modelNorm5 %>% 
-  filter(pgroup == '1') %>% 
-  drop_na() %>% 
-  ggplot(aes(x = node3, y = predicted, #used to be wa2 / forplot but not sure what they were meant to be!
-                      fill = node3)) +
-  geom_col(aes(x = node3, y = predicted), alpha = 0.4) +
-  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) +  #, scales='free_x'
-  geom_point(aes(colour=uAuB, shape=uAuB), size=3) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  guides(fill = guide_legend(override.aes = list(size = 0, alpha=0.4))) +
-  labs(x='Node', y='Effect size', fill='Weighted average \neffect size', 
-       shape='Assuming unobserved \nvariables are...', 
-       colour='Assuming unobserved \nvariables are...',
-       title = 'Weighted average for model prediction for pgroup 1')
-       
+## Correlation between participants and cesm (rough model fit) drawing out different groupings
 
-p71
+This series of scatter plots is for all three probability settings, for just this value of s, `r params$s`. In order we draw out several different variables that might help partition the graph. It's the same chart every time, only with a different variable colour split.
+
+All are at sensitivity 1 (i.e. the normal probabilities, same as participants saw).
+
+**The colour grouping here is for 'bare' variable type, observed (A and B) and unobserved (Au and Bu)**
+
+```{r, echo=FALSE}
+# Scatter of correlation
+scatter <- combNorm2 %>% 
+  filter(sens==1) %>% 
+  #filter(sens %in% c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9)) %>% 
+  ggplot(aes(x = cesm, y = ppts, color = vartype)) +
+  scale_shape_manual(values = 18:25) +
+  geom_point(size=2) + # aes(shape = node3, color = trialtype)
+  geom_line(stat="smooth", method="lm", alpha = 0.5, linewidth = 1) +
+  stat_poly_eq(use_label(c("R2", "p", "n")), small.r = TRUE, small.p = TRUE, 
+               label.y = "bottom", label.x = "right") +  # Adds regression coefs in color, but first remember load library ggpmisc
+  theme_bw() +
+  #facet_wrap(~sens) +
+  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
+
+scatter
+
+corval <- signif(cor(combNorm2$cesm, combNorm2$ppts), digits=3)
 ```
 
-Weighted averages of each probability group - here is group 2
+It seems the red dots fall into two groups: a left and a right. But so far can't tell what those clusters mean.
 
-```{r, echo=FALSE, warning=FALSE}
-p72 <- modelNorm5 %>% 
-  filter(pgroup == '2') %>% 
-  drop_na() %>% 
-  ggplot(aes(x = node3, y = predicted,
-                      fill = node3)) +
-  geom_col(aes(x = node3, y = predicted), alpha = 0.4) +
-  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) +  #, scales='free_x'
-  geom_point(aes(colour=uAuB, shape=uAuB), size=3) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  guides(fill = guide_legend(override.aes = list(size = 0, alpha=0.4))) +
-  labs(x='Node', y='Effect size', fill='Weighted average \neffect size', 
-       shape='Assuming unobserved \nvariables are...', 
-       colour='Assuming unobserved \nvariables are...',
-       title = 'Weighted average for model prediction for pgroup 2')
-       
+Next, colour grouping here for 'real' Latent variable
 
-p72
+
+```{r, echo=FALSE}
+# Scatter of correlation
+scatter1 <- combNorm2 %>% 
+  filter(sens==1) %>% 
+  #filter(sens %in% c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9)) %>% 
+  ggplot(aes(x = cesm, y = ppts, color = realLat)) +
+  scale_shape_manual(values = 18:25) +
+  geom_point(size=2) + # aes(shape = node3, color = trialtype)
+  theme_bw() +
+  #facet_wrap(~sens) +
+  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
+
+scatter1
+
+#corval <- signif(cor(combNorm3$ppts, combNorm3$cesm), digits=3)
 ```
 
-Weighted averages of each probability group - here is group 3
+The colour grouping here is for structure 
 
-```{r, echo=FALSE, warning=FALSE}
-p73 <- modelNorm5 %>% 
-  filter(pgroup == '3') %>% 
-  drop_na() %>% 
-  ggplot(aes(x = node3, y = predicted,
-                      fill = node3)) +
-  geom_col(aes(x = node3, y = predicted), alpha = 0.4) +
-  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) +  #, scales='free_x'
-  geom_point(aes(colour=uAuB, shape=uAuB), size=3) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  guides(fill = guide_legend(override.aes = list(size = 0, alpha=0.4))) +
-  labs(x='Node', y='Effect size', fill='Weighted average \neffect size', 
-       shape='Assuming unobserved \nvariables are...', 
-       colour='Assuming unobserved \nvariables are...',
-       title = 'Weighted average for model prediction for pgroup 3')
-       
+```{r, echo=FALSE}
+# Scatter of correlation
+scatter2 <- combNorm2 %>% 
+  filter(sens==1) %>% 
+  #filter(sens %in% c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9)) %>% 
+  ggplot(aes(x = cesm, y = ppts, color = structure)) +
+  scale_shape_manual(values = 18:25) +
+  geom_point(size=2) + # aes(shape = node3, color = trialtype)
+  theme_bw() +
+  #facet_wrap(~sens) +
+  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
 
-p73
+scatter2
+
+#corval <- signif(cor(combNorm3$ppts, combNorm3$cesm), digits=3)
 ```
 
+and trialtype 
 
 
-## All probgroups
-Shown next to each other with position dodge - don't like it much
-```{r, echo=FALSE, warning=FALSE}
-p6 <- combNorm %>% 
-  arrange(node3) %>% group_by(trialtype) %>% mutate(perms=6/sum(isPerm==TRUE)) %>% # This bit sets a new var to get the abline
-  ggplot(aes(x = node3, y = percent,
-             fill = pgroup, alpha = isPerm)) + # Alpha shading shows what is a coherent answer
-  scale_alpha_discrete(range = c(0.3, 0.9), guide = guide_legend(override.aes = list(fill = "black"))) +
-  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) + 
-  # Add a roving baseline for chance choice of permissable answer values (ie. the fully shaded ones)
-  geom_hline(aes(yintercept = perms), colour='red', linetype='dashed') + 
-  # Now add baseline for chance choice of any node, ie. 1/8 = .125
-  geom_hline(aes(yintercept = 0.125), colour='blue', linetype='dotted') + 
-  #geom_col(data = filter(combNorm, name=='ppts' & pgroup=='1')) +
-  geom_col(data = filter(combNorm, name=='ppts'),
-           aes(fill = pgroup), position = 'dodge') +
-  new_scale_color() +
-  geom_point(data = filter(combNorm, name=='cesm' ), #& pgroup=='1'
-             aes(shape = realLat, colour = realLat), size=2) + 
-  scale_color_brewer(name=waiver(), palette = 'Dark2', direction = -1) +
-  theme_classic() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  guides(fill = guide_legend(override.aes = list(size = 0))) +
-  labs(x='Node', y=NULL, fill='Explanation \nselected as \nbest by y% of \nparticipants', 
-       title = 'All 3 parameter groups side by side',
-       subtitle = 'Participant choice (bars) against weighted average \nCESM model prediction (dots)')
+```{r, echo=FALSE}
+# Scatter of correlation
+scatter4 <- combNorm2 %>% 
+  filter(sens==1) %>% 
+  #filter(sens %in% c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9)) %>% 
+  ggplot(aes(x = cesm, y = ppts, color = trialtype)) +
+  scale_shape_manual(values = 18:25) +
+  geom_point(size=2) + # aes(shape = node3, color = trialtype)
+  theme_bw() +
+  #facet_wrap(~sens) +
+  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
 
-p6
+scatter4
+
+#corval <- signif(cor(combNorm3$ppts, combNorm3$cesm), digits=3)
+```
+
+But after all that, it seems the best distinguisher is whether or not the effect actually occurred!
+
+
+```{r, echo=FALSE}
+# Substitute in different vars for colour and shape to pull out different aspects
+scatter5 <- combNorm2 %>% 
+  filter(sens==1) %>% 
+  ggplot(aes(x = cesm, y = ppts, shape = structure, color = E)) +
+  scale_shape_manual(values = 18:25) +
+  geom_point(size=2) + # aes(shape = node3, color = trialtype)
+  theme_bw() +
+  #facet_wrap(~sens) +
+  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
+
+scatter5
 
 ```
+
+So to put it all together, maybe the best dissociation is in vartype and Effect: people pick unobserved variables when the Effect happens.
+
+```{r, echo=FALSE}
+# Substitute in different vars for colour and shape to pull out different aspects
+scatter6 <- combNorm2 %>% 
+  filter(sens==1) %>% 
+  ggplot(aes(x = cesm, y = ppts, shape = vartype, color = E)) +
+  scale_shape_manual(values = 18:25) +
+  geom_point(size=2) + # aes(shape = node3, color = trialtype)
+  geom_line(stat="smooth", method="lm", alpha = 0.5, linewidth = 1) +
+  stat_poly_eq(use_label(c("R2", "p", "n")), small.r = TRUE, small.p = TRUE, 
+               label.y = "bottom", label.x = "right") +  # Adds regression coefs in color, but first remember load library ggpmisc
+  theme_bw() +
+  #facet_wrap(~sens) +
+  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
+
+scatter6
+
+```
+
+### A new variable called 'everything happens' (a1)
+
+This one shows a cluster of observed vars are chosen as LOW by people when everything happens
+
+```{r, echo=FALSE}
+# Scatter of correlation
+scatter7 <- combNorm2 %>% 
+  filter(sens==1) %>% 
+  ggplot(aes(x = cesm, y = ppts, color = a1, shape = vartype)) +
+  scale_shape_manual(values = 18:25) +
+  geom_point(size=2) + # aes(shape = node3, color = trialtype)
+  theme_bw() +
+  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
+
+scatter7
+
+corval <- signif(cor(combNorm2$cesm, combNorm2$ppts), digits=3)
+```
+
+```{r, echo=FALSE}
+# Scatter of correlation
+scatter8 <- combNorm2 %>% 
+  filter(sens==1) %>% 
+  ggplot(aes(x = cesm, y = ppts, color = realLat, shape = a1)) +
+  scale_shape_manual(values = 18:25) +
+  geom_point(size=2) + # aes(shape = node3, color = trialtype)
+  theme_bw() +
+  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
+
+scatter8
+
+corval <- signif(cor(combNorm2$cesm, combNorm2$ppts), digits=3)
+```
+
 
 ## Model predictions compared against participant data, split out by probability group
 
@@ -309,36 +418,36 @@ The first plot is probability group 1
 
 ```{r, echo=FALSE, warning=FALSE}
 # For plotting we need two colour scales so used package from https://eliocamp.github.io/ggnewscale/
-#library(ggnewscale) 
+#library(ggnewscale)
 
 # Probgroup 1 - the basic one, 12 facets
-p1 <- combNorm %>% 
-  filter(pgroup == '1') %>% 
+p1 <- combNorm %>%
+  filter(pgroup == '1', sens=='1') %>%
   arrange(node3) %>% group_by(trialtype) %>% mutate(perms=2/sum(isPerm==TRUE)) %>% # This bit sets a new var to get the abline
   ggplot(aes(x = node3, y = percent,
                      fill = node3, alpha = isPerm)) + # Alpha shading shows what is a coherent answer
   scale_alpha_discrete(range = c(0.3, 0.9), guide = guide_legend(override.aes = list(fill = "black"))) +
-  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) + 
+  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) +
   # Add a roving baseline for chance choice of permissable answer values (ie. the fully shaded ones)
-  geom_hline(aes(yintercept = perms), colour='red', linetype='dashed') + 
+  geom_hline(aes(yintercept = perms), colour='red', linetype='dashed') +
   # Now add baseline for chance choice of any node, ie. 1/8 = .125
-  geom_hline(aes(yintercept = 0.125), colour='blue', linetype='dotted') + 
-  geom_col(data = filter(combNorm, name=='ppts' & pgroup=='1')) +
+  geom_hline(aes(yintercept = 0.125), colour='blue', linetype='dotted') +
+  geom_col(data = filter(combNorm, name=='ppts' & pgroup=='1' & sens=='1')) +
   new_scale_color() +
-  geom_point(data = filter(combNorm, name=='cesm' & pgroup=='1'), 
-             aes(shape = realLat, colour = realLat), size=2) + 
+  geom_point(data = filter(combNorm, name=='cesm' & pgroup=='1' & sens=='1'),
+             aes(shape = realLat, colour = realLat), size=2) +
   scale_color_brewer(name=waiver(), palette = 'Dark2', direction = -1) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90)) +
   guides(fill = guide_legend(override.aes = list(size = 0))) +
-  labs(x='Node', y=NULL, fill='Explanation \nselected as \nbest by y% of \nparticipants', 
+  labs(x='Node', y=NULL, fill='Explanation \nselected as \nbest by y% of \nparticipants',
        title = 'Parameter group 1) .1, .5, .8, .5',
        subtitle = 'Participant choice (bars) against weighted average \nCESM model prediction (dots)')
 
 p1
 
-cchart <- paste0('~/Documents/GitHub/gw/Collider/figs/model_preds/','pg1s',params$stab,'.pdf')
-ggsave(cchart, plot=p1, width = 7, height = 5, units = 'in')
+#cchart <- paste0('~/Documents/GitHub/gw/Collider/figs/model_preds/','pg1s',params$stab,'.pdf')
+#ggsave(cchart, plot=p1, width = 7, height = 5, units = 'in')
 
 ```
 
@@ -346,36 +455,36 @@ The second is probability group 2.
 
 ```{r, echo=FALSE, warning=FALSE}
 # For plotting we need two colour scales so used package from https://eliocamp.github.io/ggnewscale/
-#library(ggnewscale) 
+#library(ggnewscale)
 
 # Probgroup 2 - the basic one, 12 facets
-p2 <- combNorm %>% 
-  filter(pgroup == '2') %>% 
+p2 <- combNorm %>%
+  filter(pgroup == '2', sens=='1') %>%
   arrange(node3) %>% group_by(trialtype) %>% mutate(perms=2/sum(isPerm==TRUE)) %>% # This bit sets a new var to get the abline
   ggplot(aes(x = node3, y = percent,
                      fill = node3, alpha = isPerm)) + # Alpha shading shows what is a coherent answer
   scale_alpha_discrete(range = c(0.3, 0.9), guide = guide_legend(override.aes = list(fill = "black"))) +
-  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) + 
+  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) +
   # Add a roving baseline for chance choice of permissable answer values (ie. the fully shaded ones)
-  geom_hline(aes(yintercept = perms), colour='red', linetype='dashed') + 
+  geom_hline(aes(yintercept = perms), colour='red', linetype='dashed') +
   # Now add baseline for chance choice of any node, ie. 1/8 = .125
-  geom_hline(aes(yintercept = 0.125), colour='blue', linetype='dotted') + 
-  geom_col(data = filter(combNorm, name=='ppts' & pgroup=='2')) +
+  geom_hline(aes(yintercept = 0.125), colour='blue', linetype='dotted') +
+  geom_col(data = filter(combNorm, name=='ppts' & pgroup=='2' & sens=='1')) +
   new_scale_color() +
-  geom_point(data = filter(combNorm, name=='cesm' & pgroup=='2'), 
-             aes(shape = realLat, colour = realLat), size=2) + 
+  geom_point(data = filter(combNorm, name=='cesm' & pgroup=='2' & sens=='1'),
+             aes(shape = realLat, colour = realLat), size=2) +
   scale_color_brewer(name=waiver(), palette = 'Dark2', direction = -1) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90)) +
   guides(fill = guide_legend(override.aes = list(size = 0))) +
-  labs(x='Node', y=NULL, fill='Explanation \nselected as \nbest by y% of \nparticipants', 
+  labs(x='Node', y=NULL, fill='Explanation \nselected as \nbest by y% of \nparticipants',
        title = 'Parameter group 2) .5, .1, .5, .8',
        subtitle = 'Participant choice (bars) against weighted average \nCESM model prediction (dots)')
 
 p2
 
-cchart <- paste0('~/Documents/GitHub/gw/Collider/figs/model_preds/','pg2s',params$stab,'.pdf')
-ggsave(cchart, plot=p2, width = 7, height = 5, units = 'in')
+#cchart <- paste0('~/Documents/GitHub/gw/Collider/figs/model_preds/','pg2s',params$stab,'.pdf')
+#ggsave(cchart, plot=p2, width = 7, height = 5, units = 'in')
 
 ```
 
@@ -383,174 +492,76 @@ Now for probability group 3.
 
 ```{r, echo=FALSE, warning=FALSE}
 # Probgroup 3 - the basic one, 12 facets
-p3 <- combNorm %>% 
-  filter(pgroup == '3') %>% 
+p3 <- combNorm %>%
+  filter(pgroup == '3', sens=='1') %>%
   arrange(node3) %>% group_by(trialtype) %>% mutate(perms=2/sum(isPerm==TRUE)) %>% # This bit sets a new var to get the abline
   ggplot(aes(x = node3, y = percent,
                      fill = node3, alpha = isPerm)) + # Alpha shading shows what is a coherent answer
   scale_alpha_discrete(range = c(0.3, 0.9), guide = guide_legend(override.aes = list(fill = "black"))) +
-  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) + 
+  facet_wrap(factor(trialtype, levels = trialvalsvec, labels = fulltrialspec)~.) +
   # Add a roving baseline for chance choice of permissable answer values (ie. the fully shaded ones)
-  geom_hline(aes(yintercept = perms), colour='red', linetype='dashed') + 
+  geom_hline(aes(yintercept = perms), colour='red', linetype='dashed') +
   # Now add baseline for chance choice of any node, ie. 1/8 = .125
-  geom_hline(aes(yintercept = 0.125), colour='blue', linetype='dotted') + 
-  geom_col(data = filter(combNorm, name=='ppts' & pgroup=='3')) +
+  geom_hline(aes(yintercept = 0.125), colour='blue', linetype='dotted') +
+  geom_col(data = filter(combNorm, name=='ppts' & pgroup=='3' & sens=='1')) +
   new_scale_color() +
-  geom_point(data = filter(combNorm, name=='cesm' & pgroup=='3'), 
-             aes(shape = realLat, colour = realLat), size=2) + 
+  geom_point(data = filter(combNorm, name=='cesm' & pgroup=='3' & sens=='1'),
+             aes(shape = realLat, colour = realLat), size=2) +
   scale_color_brewer(name=waiver(), palette = 'Dark2', direction = -1) +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 90)) +
   guides(fill = guide_legend(override.aes = list(size = 0))) +
-  labs(x='Node', y=NULL, fill='Explanation \nselected as \nbest by y% of \nparticipants', 
+  labs(x='Node', y=NULL, fill='Explanation \nselected as \nbest by y% of \nparticipants',
        title = 'Parameter group 3) .1, .7, .8, .5',
        subtitle = 'Participant choice (bars) against weighted average \nCESM model prediction (dots)')
 
 p3
 
-cchart <- paste0('~/Documents/GitHub/gw/Collider/figs/model_preds/','pg3s',params$stab,'.pdf')
-ggsave(cchart, plot=p3, width = 7, height = 5, units = 'in')
+#cchart <- paste0('~/Documents/GitHub/gw/Collider/figs/model_preds/','pg3s',params$stab,'.pdf')
+#ggsave(cchart, plot=p3, width = 7, height = 5, units = 'in')
 
 ```
 
-## Correlations
 
-We want to check whether people's judgements are less sensitive to the changing probs (param manipulation) than the model is? check statistically through cor(cond1-cond2) for ppts then model, then cor(cond2-3), then 1-3.
 
-```{r, echo=FALSE}
-# Correlations
-ppt1 <- dataNorm %>% filter(pgroup=='1') 
-ppt2 <- dataNorm %>% filter(pgroup=='2')
-ppt3 <- dataNorm %>% filter(pgroup=='3')
+## NEW section for bringing in sensitivity
 
-mod1 <- modelNorm %>% filter(pgroup=='1') %>% replace(is.na(.), FALSE)
-mod2 <- modelNorm %>% filter(pgroup=='2') %>% replace(is.na(.), FALSE)
-mod3 <- modelNorm %>% filter(pgroup=='3') %>% replace(is.na(.), FALSE)
+We also looked at 'sensitivity' to the probability manipulation, as a parameter scaled between 0 (a model where all four variables has probability 0.5) and 1 (they had their probabilities).
 
-ppt12cor <- signif(cor(ppt1$prop, ppt2$prop), digits = 3)
-ppt13cor <- signif(cor(ppt1$prop, ppt3$prop), digits = 3)
-ppt23cor <- signif(cor(ppt2$prop, ppt3$prop), digits = 3)
+These correlations can be visualised in a matrix, to quickly see what the best combo of stab and sens is. **TODO**
 
-mod12cor <- signif(cor(mod1$normed, mod2$normed), digits = 3)
-mod13cor <- signif(cor(mod1$normed, mod3$normed), digits = 3)
-mod23cor <- signif(cor(mod2$normed, mod3$normed), digits = 3)
-```
-
-### Participants
-Across the three parameter groups, the correlations for participants are:
-Group 1 to 2: `r toString(ppt12cor)`.
-Group 1 to 3: `r toString(ppt13cor)`.
-Group 2 to 3: `r toString(ppt23cor)`.
-
-### Model
-Across the three parameter groups, the correlations for model are:
-Group 1 to 2: `r toString(mod12cor)`.
-Group 1 to 3: `r toString(mod13cor)`.
-Group 2 to 3: `r toString(mod23cor)`.
-
-## Correlation to check model fit
-
-This scatter plot is for all three probability settings, for just this value of s.
 
 ```{r, echo=FALSE}
 # Scatter of correlation
-scatter <- ggplot(combNorm2, aes(x = ppts, y = cesm, shape = node3, color = trialtype)) +
+scatterfac <- combNorm2 %>% 
+  filter(sens %in% c(0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9)) %>% 
+  ggplot(aes(x = cesm, y = ppts, color = E)) +
   scale_shape_manual(values = 18:25) +
   geom_point(size=2) + # aes(shape = node3, color = trialtype)
   theme_bw() +
+  facet_wrap(~sens) +
   guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
 
-scatter
+scatterfac
 
+#corval <- signif(cor(combNorm3$ppts, combNorm3$cesm), digits=3)
 ```
 
-Then the important number is `r signif(cor(combNorm2$ppts, combNorm2$cesm), digits=3)`.
-
-And one for the model preds 4, equal params 0.5 for everything.
 
 ```{r, echo=FALSE}
 # Scatter of correlation
-scatterequal <- ggplot(combNormScat, aes(x = ppts, y = cesm, shape = node3, color = trialtype)) + # change color to trialtype for back the way it originally was, or structure for conj/disj
+scatter0 <- combNorm2 %>% 
+  ggplot(aes(x = cesm, y = ppts, color = sens)) +
   scale_shape_manual(values = 18:25) +
   geom_point(size=2) + # aes(shape = node3, color = trialtype)
   theme_bw() +
   guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
 
-scatterequal
+scatter0
 
-# When break down into conj / disj, there isn't any obvious group
-# When break down into realLat, no obvious group, except that realLat is always around 0.5 or <=0.25 
-# But we did define that the most off-diag grouping is the difference between the main var and the unobs var in d3 and 5. They are both causal, but differingly.
-
+corval <- signif(cor(combNorm2$cesm, combNorm2$ppts), digits=3)
 ```
 
+The overall model fit correlation is `r toString(corval)`.
 
-For THAT the important number is `r signif(cor(combNormScat$ppts, combNormScat$cesm), digits=3)`.
-
-
-
-Let's also split them out by probgroups...
-
-### Parameter group 1) .1, .5, .8, .5.
-
-```{r, echo=FALSE}
-# Scatter of correlation
-scatter1 <- combNorm2 %>% 
-  filter(pgroup == '1') %>% 
-  ggplot(aes(x = ppts, y = cesm, shape = node3, color = trialtype)) +
-  scale_shape_manual(values = 18:25) +
-  geom_point(size=2) + # aes(shape = node3, color = trialtype)
-  theme_bw() +
-  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
-
-scatter1
-
-combNorm21 <- combNorm2 %>% filter(pgroup==1) 
-corval1 <- signif(cor(combNorm21$ppts, combNorm21$cesm), digits=3)
-```
-
-The correlation is `r toString(corval1)`.
-
-### Parameter group 2) .5, .1, .5, .8.
-
-```{r, echo=FALSE}
-scatter2 <- combNorm2 %>% 
-  filter(pgroup == '2') %>% 
-  ggplot(aes(x = ppts, y = cesm, shape = node3, color = trialtype)) +
-  scale_shape_manual(values = 18:25) +
-  geom_point(size=2) + # aes(shape = node3, color = trialtype)
-  theme_bw() +
-  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
-
-scatter2
-
-combNorm22 <- combNorm2 %>% filter(pgroup==2) 
-corval2 <- signif(cor(combNorm22$ppts, combNorm22$cesm), digits=3)
-```
-
-The correlation is `r toString(corval2)`.
-
-### Parameter group 3) .1, .7, .8, .5.
-
-```{r, echo=FALSE}
-scatter3 <- combNorm2 %>% 
-  filter(pgroup == '3') %>% 
-  ggplot(aes(x = ppts, y = cesm, shape = node3, color = trialtype)) +
-  scale_shape_manual(values = 18:25) +
-  geom_point(size=2) + # aes(shape = node3, color = trialtype)
-  theme_bw() +
-  guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
-
-scatter3
-
-combNorm23 <- combNorm2 %>% filter(pgroup==3) 
-corval3 <- signif(cor(combNorm23$ppts, combNorm23$cesm), digits=3)
-
-cors <- c(corval1, corval2, corval3)
-meancor <- mean(x = cors)
-
-```
-
-The correlation is `r toString(corval3)`.
-
-Thus the average correlation across the three probability groups is `r toString(meancor)`
+**Tadeg's suggestion:** Compute model fit separately for unobserved and observed variables. I.e. since a lot of the model failing resides in not accounting for people's relative preference for unobserved variables, how much can it account for people's judgments within unobserved variables. And within observed variables.

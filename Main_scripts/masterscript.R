@@ -10,7 +10,8 @@ rm(list=ls())
 
 #------- 1. Create parameters, run cesm, get model predictions and save them ------------
 source('set_params.R')
-source('get_model_preds.R') # Takes the probability vectors of settings of the variables from `set_params.R`. 
+source('get_model_preds2.R') # (Made v2 to introduce sensitivity parameter)
+# Takes the probability vectors of settings of the variables from `set_params.R`. 
 # Also loads source file `functions.R` for 3 static functions which 1) generate world settings then 
 # model predictions for those and normalise/condition for unobserved variables
 # we also might want a way to allocate 'RealLatent' to those worlds that have >1 unobserved rows. 

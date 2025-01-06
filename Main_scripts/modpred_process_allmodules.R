@@ -13,15 +13,14 @@ library(rjson)
 library(tidyverse)
 
 
-all <- read.csv('../model_data/all.csv') %>% replace(is.na(.), 0) # 4032 of 19. now 20160 of 25
+all <- read.csv('../model_data/allnew.csv') %>% replace(is.na(.), 0) # 322560 of 24
 
-all <- all %>% rename(A_cp = 3, Au_cp = 4, B_cp = 5, Bu_cp = 6, 
-                      structure = 12, pgroup = 15,
-                      vA = 16, vAu = 17, vB = 18, vBu = 19)
+all <- all %>% rename(A_cp = 13, Au_cp = 14, B_cp = 15, Bu_cp = 16,
+                      vA = 2, vAu = 3, vB = 4, vBu = 5)
 
 all$pgroup <- as.factor(all$pgroup)
 
-all <-  all %>% select(-c(X, structure.y, pgroup.y))
+#all <-  all %>% select(-c(X, structure.y, pgroup.y))
 
 # Bring in trialtype and rename as the proper string name just in case
 all$trialtype <- all$group
@@ -43,36 +42,36 @@ all$trialtype[all$trialtype==5 & all$structure=='conjunctive'] <- 'c5'
 # For each variable, under *actual causation*, if its setting does not equal the effect, 
 # then its setting can't have contributed to the outcome. So set it to 0. 
 # Do this manually for each of the 4 vars as we can't find a quicker simpler way to do it.
+
+# ----- could probably do this later too, then we don't need to rerun the big split. 
+# Can treat for actual causation after the split but before calculating wa and normalisation in 'combine_per_s'
   
-all$A_cp[all$vA!=all$E] <- 0
-all$Au_cp[all$vAu!=all$E] <- 0
-all$B_cp[all$vB!=all$E] <- 0
-all$Bu_cp[all$vBu!=all$E] <- 0
+# all$A_cp[all$vA!=all$E] <- 0
+# all$Au_cp[all$vAu!=all$E] <- 0
+# all$B_cp[all$vB!=all$E] <- 0
+# all$Bu_cp[all$vBu!=all$E] <- 0
 
 # ---------- Conditional probability and weighted average -------------
 
 # Multiply raw effect sizes by cond.prob for what will make up what we're calling 'weighted average', 
 # and rename to follow same pattern as _cp, so we can pivot by what kind of model prediction it is
-all[,24:27] <- all[,2:5]*all$cond # THIS NEED NEW NUMBER
-all <- all %>% rename(A_wa = 24, Au_wa = 25, B_wa = 26, Bu_wa = 27)
-                        
-# This is the step we were preparing for!
-# cp is the conditional cesm, and wa is that * con.probs
-# Now we want to structure it slightly longer, on node only, matching the 'cp' and the 'wa' to node
-all <- all %>% pivot_longer(cols = -c(index, V5:trialtype), names_to = c('node', '.value'),
-                              names_sep = '_') # Gives 768 of 15 vars (126 for each of 6 probgroups)
+# (ITS POSSIBLE THIS IS NEVER USED BECAUSE WE SUMMARISE IT LATER ANYWAY in the 'modelNorm' steps.
+# Rerun with all this commented?!
+# ---------
+# all[,26:29] <- all[,13:16]*all$cond 
+# all <- all %>% rename(A_wa = 26, Au_wa = 27, B_wa = 28, Bu_wa = 29)
+#                         
+# # This is the step we were preparing for!
+# # cp is the conditional cesm, and wa is that * con.probs
+# # Now we want to structure it slightly longer, on node only, matching the 'cp' and the 'wa' to node
+# all <- all %>% pivot_longer(cols = -c(X:group, V16:trialtype), names_to = c('node', '.value'),
+#                               names_sep = '_') # Gives 768 of 15 vars (126 for each of 6 probgroups)
 
-
-# ------------ Weighted average ----------------------
-
-# Turns out I did not do weighted average. Now to do that
-
-
-
+# Commenting stop here....
 
 
 # The unobserved variables have different explanatory role depending what we presume their value to be.
-# So we need to split them out. First one with 6 (just for unobserved)
+# So we need to split them out. First one with 6 (just for unobserved) 
 all$node2 <- all$node
 all$node[all$vAu=='0' & all$node2=="Au"] <- 'Au=0'
 all$node[all$vAu=='1' & all$node2=="Au"] <- 'Au=1'
@@ -85,11 +84,11 @@ all$node3[all$vA=='1' & all$node2=='A'] <- 'A=1'
 all$node3[all$vB=='0' & all$node2=='B'] <- 'B=0'
 all$node3[all$vB=='1' & all$node2=='B'] <- 'B=1'
 
-# Later we may delete this line and do the 0s elsewhere -- 16320 / 16128
-all <- all %>% complete(pgroup, trialtype, node3, s) # 20160 - problem because lots of NAs 82656 of 24
+# Later we may delete this line and do the 0s elsewhere -- 16320 / 16128 - why is s in it?
+all <- all %>% complete(pgroup, trialtype, node3, s, sens) # 1322496 of 26
 
 # Structure
-all$structure <- if_else(grepl("^c", all$trialtype), 'conjunctive', 'disjunctive')
+#all$structure <- if_else(grepl("^c", all$trialtype), 'conjunctive', 'disjunctive')
 all$wa <- all$wa %>% replace(is.na(.), 0) 
 
 # Get a tag of the unobserved variables' settings. Then we can group data by this for plotting
@@ -173,25 +172,15 @@ all$realLat[all$trialtype=='d5' & all$node2=='Au'] <- FALSE
 # conds <- fromJSON(file = '../Experiment/conds.json')
 # condsdf <- as.data.frame(conds) # 2 obs of 21 vars 
 
-
-
-
-#Then we want to keep only pgroup1:3, as 4:6 is no longer needed (it is flipped A/B for 1:3 and so can collapse with counterbalancing)
-#all <- all %>% filter(pgroup %in% c('1','2','3')) # 8160 obs of 25
-# Can make a separate one for the pgroup==4 model test
-#all4 <- all %>% filter(pgroup=='4')
-
 # write this as csv in case need it later 
-write.csv(all, '../model_data/tidied_preds2.csv')
-#write.csv(all4, '../model_data/tidied_predspg4.csv')
+write.csv(all, '../model_data/tidied_preds3.csv')
 
-# Get a single CESM number for each node, disregarding possible settings
-# weight <- all %>% group_by(pgroup, trialtype, node2) %>% summarise(weight = sum(wa))
+# Then split into the different s_vals and save as R.data LATER CHANGE THE FILEPATH TO BE TIDY - not done for real yet
+splitbys <- split(all, all$s)
 
-# Now go to `combine_ppt_with_preds.R` to combine these tidied predictions with the processed ppt data from `mainbatch_preprocessing.R`
-
-
-
-
+for (st in 1:length(s_vals)) {
+  mp <- splitbys[[st]]
+  save(mp, file = paste0(s_vals[[st]], '.Rdata'))
+}
 
 

@@ -95,7 +95,7 @@ get_cond_probs <- function(df) {
 # d6L Au and Bu
 
 n <- 10
-pEq <- rep(0.5, 40000)
+#pEq <- rep(0.5, 40000)
 
 # ---------- Intermediate function for direct dependency ----------
 # A function to run the generic minimal CESM. Takes arguments of:
@@ -134,38 +134,21 @@ get_dd <- function(params, structure, df) {
         cfs$E <- as.numeric((cfs[1] & cfs[2]) | (cfs[3] & cfs[4])) 
       }
       
-      # Add column T/F for the ones that match
-      cfs$Match <- cfs$E==case$E
+      # Add column T/F: the ones where Effects DON'T match are causes
+      cfs$Cause <- !(cfs$E==case$E)
       cfs$world <- c_ix
       # Then add cfs
-      allcfs <- rbind(allcfs, cfs)
+      allcfs <- rbind(allcfs, cfs) # Currently for each world, each var gets a 'Match'. 
+      # Instead we need a vector of 4, ie for each cause for each world, where FALSE means Yes it was causal
+      # Could just have the vector of Match and express as 
     } 
-      #cor_sizes <- rep(NA, n_causes)
-      #realcfs <- rep(NA, n_causes)
-      
-      # the second part sets correlation negative when cause pushes against effect taking state it took
-      #cor_sizes[cause] <- cor(cfs[[causes[cause]]], cfs$Match) * (c(-1,1)[as.numeric(case[[causes[cause]]])+1])
-      #realcfs[cause] <- sum(cfs[[causes[cause]]]!=case[[causes[cause]]])
-      
-      # (Note we can also do phi of counts, psych package)
-    
-      # We want to keep cfs somewhere, to know how many datapoints are used each time, and what the variance is
-      # cfs$world <- c_ix
-      # cfs$structure <- structure
-      # cfs$s <- s
-      # allcfs <- rbind(allcfs, cfs)
-    #mp[c_ix,1:4] <- cor_sizes
-    #mp[c_ix,5:8] <- realcfs
-    #mp[c_ix, 5] <- sum(cfs$E==case$E)
-    #mp$index <- 1:nrow(mp)
-    #mp$structure <- structure
-    #mp$s <- s
-    #mp$sens <- sens
   }
+  allcfs$node <- rep(c('A','Au','B','Bu'), 16)
   allcfs
+  #results <- data.frame(matrix(allcfs$Cause, nrow = worlds, byrow = T)) # give 16*4 if want vars by row
 }
 
-test <- get_dd(params, 'disjunctive', df) # gives 64 = 16*4
+#test <- get_dd(params, 'disjunctive', df) # gives 64 = 16*4
 
 
 # ------------- CESM FUNCTION ----------------------------
@@ -186,12 +169,14 @@ get_cfs <- function(params, structure, df, s, sens) {
   
   #sentest <- runif(n_causes*N_cf) < sens
   pvec <- rep(p, times = N_cf) # Turn it into a 40k vec
+  p_vec_prime <- (1-sens)*rep(.5, length(pvec)) + sens * pvec
   #pv <- rep(p, times = N_cf)
   # Now the real pvec to use has 0.5 for where in sentest is T, and the params for where sentest is F
   # pv[sentest] is the params from the positions where sentest==T
   #pEq[sentest] <- pv[sentest] # Now use pEq as the pvec
   
-  mp <- df[,1:4]
+  #mp <- df[,1:4]
+  mp <- df # should have 11 vars
   worlds <- nrow(df)
   
   # Loop through 16 possible world settings
@@ -204,14 +189,11 @@ get_cfs <- function(params, structure, df, s, sens) {
     # Repeat the cause settings of the current world 10000 times
     cf_csrep <- rep(as.numeric(case[1:n_causes]), times = N_cf) # 40k vec
     # Now resample from its prior each value whose place in resample was set to TRUE in stability step
-    cf_csrep[resample] <- runif(sum(resample)) < pvec[resample] # replace with pEq if use my way
+    cf_csrep[resample] <- runif(sum(resample)) < p_vec_prime[resample] # Neil's version for the sensitivity param
+    #cf_csrep[resample] <- runif(sum(resample)) < pvec[resample] # replace with pEq if use my way
     # Express these generated counterfactuals in tabular form again
     cfs <- data.frame(matrix(cf_csrep, nrow = N_cf, byrow = T))
     colnames(cfs) <- causes
-    
-    # Neil's 
-    p_vec_prime <- (1-sens)*rep(.5, length(pvec)) + sens * pvec
-    cf_csrep[resample] <- runif(sum(resample)) < p_vec_prime[resample] 
     
     # Calculate effect (determinative)
     if (structure=="conjunctive") { 
@@ -239,12 +221,16 @@ get_cfs <- function(params, structure, df, s, sens) {
     # cfs$structure <- structure
     # cfs$s <- s
     # allcfs <- rbind(allcfs, cfs)
-    mp[c_ix,1:4] <- cor_sizes
-    mp[c_ix,5:8] <- realcfs
-    mp[c_ix, 9] <- sum(cfs$E==case$E)
+    #mp[c_ix,1:4] <- cor_sizes
+    mp[c_ix,12:15] <- cor_sizes
+    #mp[c_ix,5:8] <- realcfs
+    mp[c_ix,16:19] <- realcfs
+    #mp[c_ix, 9] <- sum(cfs$E==case$E)
+    mp[c_ix, 20] <- sum(cfs$E==case$E)
     mp$index <- 1:nrow(mp)
-    mp$structure <- structure
+    #mp$structure <- structure
     mp$s <- s
+    mp$sens <- sens
   }
   mp
 }
