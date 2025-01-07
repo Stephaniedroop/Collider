@@ -11,7 +11,7 @@
 rm(list=ls())
 library(rjson)
 library(tidyverse)
-
+s_vals <- c(seq(0.6, 0.95, 0.05), seq(0.96, 0.99, 0.01)) 
 
 all <- read.csv('../model_data/allnew.csv') %>% replace(is.na(.), 0) # 322560 of 24
 
@@ -67,8 +67,9 @@ all$trialtype[all$trialtype==5 & all$structure=='conjunctive'] <- 'c5'
 # all <- all %>% pivot_longer(cols = -c(X:group, V16:trialtype), names_to = c('node', '.value'),
 #                               names_sep = '_') # Gives 768 of 15 vars (126 for each of 6 probgroups)
 
-# Commenting stop here....
-
+# Except we want to pivot without _wa, only _cp
+all <- all %>% pivot_longer(cols = c(A_cp:Bu_cp), names_to = c('node', '.value'), names_sep = '_') 
+# Gives 1290240 obs of 23 vars
 
 # The unobserved variables have different explanatory role depending what we presume their value to be.
 # So we need to split them out. First one with 6 (just for unobserved) 
@@ -85,11 +86,9 @@ all$node3[all$vB=='0' & all$node2=='B'] <- 'B=0'
 all$node3[all$vB=='1' & all$node2=='B'] <- 'B=1'
 
 # Later we may delete this line and do the 0s elsewhere -- 16320 / 16128 - why is s in it?
-all <- all %>% complete(pgroup, trialtype, node3, s, sens) # 1322496 of 26
+all <- all %>% complete(pgroup, trialtype, node3, s, sens) # 1322496 of 25
 
-# Structure
-#all$structure <- if_else(grepl("^c", all$trialtype), 'conjunctive', 'disjunctive')
-all$wa <- all$wa %>% replace(is.na(.), 0) 
+#all$wa <- all$wa %>% replace(is.na(.), 0) 
 
 # Get a tag of the unobserved variables' settings. Then we can group data by this for plotting
 all <- all %>% unite("uAuB", vAu,vBu, sep= "", remove = FALSE)
@@ -180,7 +179,7 @@ splitbys <- split(all, all$s)
 
 for (st in 1:length(s_vals)) {
   mp <- splitbys[[st]]
-  save(mp, file = paste0(s_vals[[st]], '.Rdata'))
+  save(mp, file = paste0('../model_data/', s_vals[[st]], '.Rdata'))
 }
 
 
