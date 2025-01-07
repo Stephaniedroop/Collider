@@ -156,30 +156,16 @@ all$realLat[all$trialtype=='d2' & all$node2=='Bu'] <- FALSE
 all$realLat[all$trialtype=='d3' & all$node2=='Bu'] <- FALSE
 all$realLat[all$trialtype=='d4' & all$node2=='Au'] <- FALSE
 all$realLat[all$trialtype=='d5' & all$node2=='Au'] <- FALSE
-# (This same thing can go to the ppt data)
-
-# And then we need a way to summarise the proportions. This is like done in normalisation?
-
-
-# Also need a way to tag 'incoherent' or unreal values. 
-# This includes ones where the actual cause was set to 0 manually, and also one brought in by 'complete'
-
-# ---------- Get jsons of static worlds info used in experiment ------
-# Get the jsons
-# worlds <- fromJSON(file = '../Experiment/worlds.json')
-# worldsdf <- as.data.frame(worlds) # 8 obs of 132 vars
-# conds <- fromJSON(file = '../Experiment/conds.json')
-# condsdf <- as.data.frame(conds) # 2 obs of 21 vars 
 
 # write this as csv in case need it later 
 write.csv(all, '../model_data/tidied_preds3.csv')
 
-# Then split into the different s_vals and save as R.data LATER CHANGE THE FILEPATH TO BE TIDY - not done for real yet
+# Then split into the different s_vals and save as R.data
 splitbys <- split(all, all$s)
 
 for (st in 1:length(s_vals)) {
   mp <- splitbys[[st]]
-  save(mp, file = paste0('../model_data/', s_vals[[st]], '.Rdata'))
+  save(mp, file = paste0('../model_data/', s_vals[[st]], 'model.Rdata'))
 }
 
 

@@ -11,22 +11,15 @@ params:
 knitr::opts_chunk$set(echo = TRUE)
 # Script takes the processed data from the collider ppt expt (`DATA.RDATA`)
 # (which was cleaned and sliced in `mainbatch_preprocessing.R`) 
-# and combines it with the preprocessed model predictions from `modpred_process_allmodules.R` (`tidied_preds.csv`)
+# and combines it with the preprocessed model predictions from `modpred_processing1.R` (`tidied_preds3.csv` or split by s val)
 ```
 
 This code combines participant and model predictions at stability parameter `r params$s`. 
 
 ```{r, include=FALSE}
-load('../Data/Data.Rdata', verbose = T) # This is one big df, 'data', 3408 obs of 18 ie. 284 ppts
+load(file = paste0('../processed_data/', s ,'comb.Rdata'))
 
-# These for when each rmd was loading the whole dataset. Now we are trying to do it separately
-#mod <- read.csv('../model_data/tidied_preds3.csv') # 82656 of 31 , 110208 if 4 params
-#mod$s <- as.character(mod$s)
-#mp <- mod[mod$s %in% params$stab, ]
-
-load(file = paste0(s,'.rdata'))
-
-mp <- d 
+#mp <- d 
 
 mp$pgroup <- as.factor(mp$pgroup)
 mp$node3 <- as.factor(mp$node3)
@@ -35,13 +28,13 @@ mp$sens <- as.factor(mp$sens)
 mp$structure <- as.factor(mp$structure)
 mp$E <- as.factor(mp$E)
 
-# ACTUAL CAUSATION - still to treat for
+# For ACTUAL CAUSATION - some variables must be set to 0 if they are inconsistent with outcome 
+# (eg A=0 cannot be a cause of E=1 )
 
-# all$A_cp[all$vA!=all$E] <- 0
-# all$Au_cp[all$vAu!=all$E] <- 0
-# all$B_cp[all$vB!=all$E] <- 0
-# all$Bu_cp[all$vBu!=all$E] <- 0
-
+mp$cp[mp$vA!=mp$E & mp$node2=='A'] <- 0
+mp$cp[mp$vAu!=mp$E & mp$node2=='Au'] <- 0
+mp$cp[mp$vB!=mp$E & mp$node2=='B'] <- 0
+mp$cp[mp$vBu!=mp$E & mp$node2=='Bu'] <- 0
 
 
 
@@ -54,14 +47,14 @@ mp$E <- as.factor(mp$E)
 #   summarise(wa = sum(intermed)) %>% 
 #   mutate(normed = wa/sum(wa, na.rm = T))
 
-# For scatter to see if grouping falls naturally when by E. This way doesn't give all combos (ie gives NAs) but ok here? NEW VERSION WITH E used to called modelNOrm 
+# For scatter to see if grouping falls naturally when by E. This way doesn't give all combos (ie gives NAs) but ok here? NEW VERSION WITH E  
 modelNorm <- mp %>%  # 384
   group_by(sens, pgroup, trialtype, E, node3, uAuB, cond) %>% # guess it's ok to not have .drop=F
   summarise(meancesm = mean(cp)) %>%  # take the mean of the 10 model runs
   mutate(intermed = meancesm*cond) %>% 
   group_by(sens, pgroup, trialtype, E, node3) %>% 
   summarise(wa = sum(intermed)) %>% 
-  mutate(normed = wa/sum(wa, na.rm = T))
+  mutate(normed = round(wa/sum(wa, na.rm = T),3))
 
 
 
@@ -120,10 +113,13 @@ modelPlaceholder <- mp %>%
 #   group_by(sens, pgroup, trialtype, node3, realLat, isLat, .drop = FALSE) %>% 
 #   tally
 
-
+#modelPlaceholder$realLat <- as.factor(modelPlaceholder$realLat)
+#modelPlaceholder$isLat <- as.factor(modelPlaceholder$isLat)
 # For realLat, everything TRUE has been defined as such. 
 # Everything else needs to be FALSE (currently some are na because we used .drop=F to get all the combinations).
-modelPlaceholder <- modelPlaceholder %>% replace(is.na(.), FALSE) %>% select(-n)
+modelPlaceholder$realLat <- modelPlaceholder$realLat %>% replace(is.na(.), FALSE)
+modelPlaceholder$isLat <- modelPlaceholder$isLat %>% replace(is.na(.), FALSE)
+modelPlaceholder <- modelPlaceholder %>% select(-n)
 #modelPlaceholder2 <- modelPlaceholder2 %>% replace(is.na(.), FALSE) %>% select(-n)
 
 modelNorm <- merge(modelNorm, modelPlaceholder)
@@ -168,6 +164,8 @@ dataNorm <- data %>% # 289
 # Merge and keep all the 288 combinations, adding the isPerm vals for the ones that got an answer
 dataNorm <- merge(x=dataNorm, y=dataPlaceholder, all.x = T) %>% replace(is.na(.), FALSE) %>% select(1,2,3,6,4,5)
 # This then used for likelihood calc
+
+# BUT WE DECIDED WE WON'T FILTER BY ISPERM... still, it doesn't matter we tagged it here
 
 
 # ----------- 3. The actual merge! ------------ 
@@ -278,7 +276,7 @@ scatter
 corval <- signif(cor(combNorm2$cesm, combNorm2$ppts), digits=3)
 ```
 
-It seems the red dots fall into two groups: a left and a right. But so far can't tell what those clusters mean.
+It looks like participants rate the unobserved variables higher than the model does.
 
 Next, colour grouping here for 'real' Latent variable
 
@@ -388,6 +386,8 @@ scatter7 <- combNorm2 %>%
   ggplot(aes(x = cesm, y = ppts, color = a1, shape = vartype)) +
   scale_shape_manual(values = 18:25) +
   geom_point(size=2) + # aes(shape = node3, color = trialtype)
+  #stat_poly_eq(use_label(c("R2", "p", "n")), small.r = TRUE, small.p = TRUE, 
+               #label.y = "bottom", label.x = "right") +
   theme_bw() +
   guides(shape = guide_legend(override.aes = list(size = 5) ) ) # Makes key symbols bigger
 
@@ -414,11 +414,13 @@ corval <- signif(cor(combNorm2$cesm, combNorm2$ppts), digits=3)
 
 ## Model predictions compared against participant data, split out by probability group
 
-The first plot is probability group 1
+These three plots show dotted line for baseline, if considering permissable variables. (But we decided not to use that, so unclear at Jan25 if this has repercussions downstream. If not, these charts are just useful for historical record).
+
+The first plot is probability group 1.
 
 ```{r, echo=FALSE, warning=FALSE}
 # For plotting we need two colour scales so used package from https://eliocamp.github.io/ggnewscale/
-#library(ggnewscale)
+library(ggnewscale)
 
 # Probgroup 1 - the basic one, 12 facets
 p1 <- combNorm %>%
@@ -528,7 +530,7 @@ p3
 
 We also looked at 'sensitivity' to the probability manipulation, as a parameter scaled between 0 (a model where all four variables has probability 0.5) and 1 (they had their probabilities).
 
-These correlations can be visualised in a matrix, to quickly see what the best combo of stab and sens is. **TODO**
+These correlations can be visualised in a matrix, to quickly see what the best combo of stab and sens is, in the file `lesions_and_NLL.Rmd`.
 
 
 ```{r, echo=FALSE}

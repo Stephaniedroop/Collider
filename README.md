@@ -38,6 +38,7 @@ Setting up Collider worlds and getting model predictions for them:
 - `set_params.R` - small script to set the different probabilities we want to manipulate for the model and experiment
 - `get_model_preds2.R` - get model predictions
 - `functions.R` - static script of functions used to set up the worlds and run the CESM model
+- `modpred_processing1.R` - get the model predictions in a user-friendly format: Wrangles and renames variables, splits out node values 0 and 1, saves .rdata for each value of stability parameter s
 
 Processing behavioural experiment data (see folder `Experiment' for the JS code of experiment):
 
@@ -52,7 +53,7 @@ Combining participant data with model predictions and assessing model fit:
 #### Non-core
 
 - `cesmheavyfunc.R` - an older, heavier, learning version of the CESM model, where everything is defined as variables and pulled out as dataframe rows. Can be easier to read.
-- `check_preds_plot.R` - probably won't end up using
+- `check_preds_plot.R` - plots to check the predictions.
 - `checkmodelvariance.R` - just a check that 10 runs of the model produce predictions with acceptable variance (they do).
 
 ### FOLDER Experiment
