@@ -84,8 +84,8 @@ write.csv(alldd, "../model_data/alldd.csv")
 # can do it by hand, no simulation for the 1111 conj: because changing any var is fully determinative of effect not occurring. In 1111 dis everything is 0.
 # - this option should make predictions like 'two options are equally good'
 
-library(xtable)
-print(xtable(dfd, type = "latex", digits = 0), file = "dfd.tex")
+#library(xtable)
+#print(xtable(dfd, type = "latex", digits = 0), file = "dfd.tex")
 
 
 

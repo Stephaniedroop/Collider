@@ -30,19 +30,30 @@ However elegant this model is, it can't be the whole story. The causal score it 
 #### Core
 
 - `masterscript.R` - top level script to wrangle and process the participant data, run the CESM to get model predictions and save them in folder `model_data`, run other mdoel lesions, check model fit, plot all charts, etc. Not yet working out of the box, but best place to see the structure.
-- `mainbatch_preprocessing.R` - get the participants' behavioural experiment data ready.
-- `functions.R` - static script of functions used to set up the worlds and run the CESM model
+
+The masterscript runs scripts in the following chunks:
+
+Setting up Collider worlds and getting model predictions for them:
+
 - `set_params.R` - small script to set the different probabilities we want to manipulate for the model and experiment
 - `get_model_preds2.R` - get model predictions
+- `functions.R` - static script of functions used to set up the worlds and run the CESM model
+
+Processing behavioural experiment data (see folder `Experiment' for the JS code of experiment):
+
+- `mainbatch_preprocessing.R` - get the participants' behavioural experiment data ready.
+
+Combining participant data with model predictions and assessing model fit:
+
 - `combine_ppt_with_preds.R` - combine predictions with participant data
 - `combine_lesions.Rmd`, `combine_per_s_oldplots.Rmd`, `combine_per_s.Rmd`, `combine_sens.Rmd`, `combine_summary_plots.Rmd`, `lesions_and_NLL.Rmd` - all these generate html pages to visualise the model predictions against the participant data, for each of the different parameter combinations. WIP. Undecided what will form narrative flow of paper. Masterscript takes precedence.
-- `modpred_processing.R` and any other variant that starts 'modpred_process...' - some model lesions do not require a full rerun of the cesm model but can be done post hoc by cutting or changing parts of how the model scores and probabilities are normalised, conditioned on, inferred, or otherwise combined and used. WIP.
+- `modpred_processing.R` is old. Use any other variant that starts `modpred_process...` - some model lesions do not require a full rerun of the cesm model but can be done post hoc by cutting or changing parts of how the model scores and probabilities are normalised, conditioned on, inferred, or otherwise combined and used. WIP.
 
 #### Non-core
 
 - `cesmheavyfunc.R` - an older, heavier, learning version of the CESM model, where everything is defined as variables and pulled out as dataframe rows. Can be easier to read.
 - `check_preds_plot.R` - probably won't end up using
-- `check_model_variance.R` - just a check that 10 runs of the model produce predictions with acceptable variance (they do).
+- `checkmodelvariance.R` - just a check that 10 runs of the model produce predictions with acceptable variance (they do).
 
 ### FOLDER Experiment
 
