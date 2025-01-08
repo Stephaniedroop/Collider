@@ -1,0 +1,328 @@
+## Some more/earlier on NLL
+
+### Very simple baseline
+log(1/8)*3408 is `r toString(log(1/8)*3408)`
+
+### Less simple baseline 
+(568 is 1/6 of 3408, for the 2 worlds where there are 4 coherent answers, the rest is the 5/6)
+
+log(0.25)*568+log(0.5)*2840 is `r toString(log(0.25)*568+log(0.5)*2840)`
+
+### Of actual data
+
+```{r, echo=FALSE, warning=FALSE} 
+nllfull <- combNorm2 %>% filter(s==0.7, sens==0.5) %>% 
+  mutate(nll = log(cesm)*n)
+temp1 <- nllfull %>% filter(cesm!=c(0,NA,NaN))
+newnllfull <- sum(temp1$nll)
+ll <- exp(newnllfull)
+
+nll0 <- combNLL0 %>% mutate(nll = log(normed)*n)
+temp0 <- nll0 %>% filter(normed!=c(0,NA,NaN))
+newnll0 <- sum(temp0$nll)
+
+nlln <- combNLLn %>% mutate(nll = log(normed)*n)
+tempn <- nlln %>% filter(normed!=c(0,NA,NaN))
+newnlln <- sum(tempn$nll)
+
+# MAYBE DON'T NEED ANY OF THIS, SEEING AS WE HAVE THE SECTION ABOVE
+
+```
+
+## Does the model fit differently between variable types? In observed vs unobserved variables
+
+How to do this:
+  - *high level*: condition on people selecting observed var, then try to fit model within that. 
+- *in detail*: 
+  1. in the likelihood calc, this means instead of the people's count of answers summing to 1 across all 4 variables, take only the counts for unobserved and observed, and normalise within those. The model predicted a score for the two consistent vars. Then we normalised it, then x people selected it for that trial. 
+2. Then we could sum the likelihood for observed and unobserved and compare to the one where we do the likelihood all in a oner. 
+3. Then we see whether we get a higher correlation over unobserved v unobserved.
+
+```{r}
+
+combNorm3_processed <- lapply(combNorm3, function(tbl) {
+  tbl %>%
+    group_by(trialtype, vartype) %>%
+    summarise(sum_nll = sum(nll, na.rm = TRUE),
+              .groups = "drop")
+})
+
+# Then test
+test <- combNorm3_processed[[200]]
+test <- combNorm3[[1]]
+# %>% summarise(sum_normalized_nll = sum(normalized_nll), .groups = "drop")
+
+index <- which(sapply(combNorm3, function(tbl) 
+  any(tbl$s == 0.7 & tbl$sens == 1)))
+
+forT <- combNorm3_processed[[index]]
+
+specific <- combNorm3[[which(sapply(combNorm3, function(tbl) 
+  any(tbl$s == desired_s_value & tbl$sens == desired_sens_value)))]]
+
+```
+
+In the elements of combNorm3, (see 'test' for an example), only two answers are permitted. When they are both of one vartype, the other one is necessarily NaN. These facets should be missed out when discussing.
+
+## Issues in how to lesion the model 
+
+Tadeg's point: the step where the model averages 2-4 points (first chart on this page) to get the single point is too hard for ppl to do. So instead, they might do something simpler. Several ways to lesion the model to represent the simpler calculation people may be doing are detailed in [notes]. 
+
+Question is, for that do we still do the conditioning including unobserved vars in the function `get_cond_probs`? (Second function in `functions.R`.)
+
+In either case, we don't need to rerun the cesm model predictions, as getting the conditional probabilities is a separate treatment to the cesm effect sizes. Like 'actual cause treatment', can be done afterwards. 
+
+But how?
+
+Well, we might simply use the raw model scores, without multiplying by the conditional probability.
+But there are other approaches:
+
+1. Assume as many 1s as possible, and cesm score for that situation.
+2. Sample a setting of the unobserved variables according to its probability.
+3. Sample one randomly/uniformly
+4. Compute all but not average: take highest, lowest, or half way. (How would this actually be different from sampling a setting?)
+5. Close to cesm on cases that don't need marginalisation, and guess randomly on ones that do
+6. Take most plausible/available/likely, 'how important is A under whats most likely to have happened'
+
+Or:
+  1. sample one of the probabilities (draw 1 and assume it's true) - this would induce variance in what the model predicts so need to do lot of time
+2. they might compute all but not average (might take highest or lowest, or half way)
+3. take most plausible/available, which in causal exps means everything happens, *heuristic*, take eg 1111 ('assume as many 1s as possible' and take cesm score for that situation)
+4. but that doesn't apply here, so maybe push to 1 if it's above .5, or to 0, or random sample? 'how important is A under whats most likely to have happened'
+4. another way is that they might be close to cesm on cases that dont require marginalisation, and guess randomly on ones that do
+
+(Actually, decided with Neil that anything involving sampling would end up the same as the cesm score, as it is just shifting the probabilistic part to elsewhere. So abandoned this for a new script, combine_sens)
+
+Next step, what actual numbers are used for each of these?
+
+#### 1. 'Pick most 1s'
+Modelnorm2, take max(uAuB) and then cesm value for that. This will sometimes be 0 when treated for actual causation, as in the case where A=0,B=1,E=0 (conj). The unobserved variables may well be 11, but we know that if they were, they cannot be the explanation for the effect not happening, and so are given 0. 
+
+Basically the variable res4 below now gives the normalised model scores for each model, and posits the likely setting of the unobserved variable while each variable gets its main rating.
+
+**To decide** -- do we allow one model lesion where it would do this on its own, even if it picks / gives model score to something incoherent? Or do we combine with actual causation in a hybrid. Probably hybrid? So, model selects setting of unobserved variable with most 1s which is also actual cause-consistent? Assumed Yes.
+
+Question to Neil: I’ve made some progress with two model lesions that involve sampling uAuB; Most1s and byProb. By that I mean I have wrangling code to pick a setting of unobs vars in a principled way. However I’m not sure how then to ‘attach’ or feed back the cesm score by node value
+
+[This now ready to go to likelihood and charts]
+
+Reference Ivar Kolvoort's sample model where default or canonical state is everything works and everything happens.positivuty bias, valnce bias?
+                                        (Also similar matching bias where the unobs var simply matches what happens - if E0 then both unobs 0, if 1 then both 1)
+                                      
+                                      #### 2. 'Sample unobs according to conditional probability'
+                                      
+                                      modelNorm2, group by pgroup and trialtype but not node3, then uAuB, to get the individual possibilities from which to sample. Then sample one as the likely setting for that whole world. However so far I did not keep the 'tags' of the node settings so that is important.
+                                      
+                                      #### 3. 'What's most likely to have happened?'
+                                      Start with modelNorm2 or repurpose from lesion 2.
+                                      
+                                      
+                                      
+                                      ```{r, include=FALSE}
+                                      
+                                      
+                                      # But we also need a version that keeps all the unobserved variables - 480 obs
+                                      modelNorm2 <- mp %>% # 480 of 5 (cos separate value for each uAuB)
+                                        filter(pgroup!=4) %>% 
+                                        group_by(pgroup, trialtype, node3, uAuB, cond, .drop = FALSE) %>% 
+                                        summarise(meancesm = mean(cp)) %>% 
+                                        # intermed is the thing that is added together to get the wa. Currently unnormalised
+                                        mutate(intermed = meancesm*cond) %>% 
+                                        mutate(temp = max(uAuB))
+                                      
+                                      # --------- Lesioning the model -------
+                                      # LESION 1
+                                      # Pick out the 'max permissable 1s' but then we need an index match or some other way to tag the corresponding cesm
+                                      dd <- modelNorm2 %>% 
+                                        ungroup() %>% 
+                                        group_by(pgroup,trialtype,node3) %>% 
+                                        summarise(maxuAuB = max(uAuB)) # ie picks 11 if it is there, and if not then 10, 01, etc
+                                      
+                                      # Now get the model predictions for those conditions only - but this results in zeroes sometimes so is no good
+                                      #res <- merge(dd, modelNorm2, by = c("pgroup", "trialtype", "node3")) %>% 
+                                      #filter(uAuB==maxuAuB) 
+                                      # So we need another step first - Same thing but keep only contentful model predictions first 
+                                      res2 <- merge(dd, modelNorm2, by = c("pgroup", "trialtype", "node3")) %>% 
+                                        filter(meancesm!=c(0,NA)) # 111 obs
+                                      
+                                      # THEN filter for the 'max allowable unobs vars to still get positive model score'
+                                      res3 <- res2 %>% group_by(pgroup,trialtype,node3) %>% summarise(maxuAuB = max(uAuB)) # 90 obs. 
+                                      # From that we bring in the model score again BUT WHAT TO DO ABOUT THE NODES - WHICH MODEL SCORE?
+                                      res4 <- merge(res3, modelNorm2, by = c("pgroup", "trialtype", "node3")) %>% filter(uAuB==maxuAuB) # 90 obs of 8
+                                      # What we now do is normalise those model predictions. The conditional probabilities can be removed, as can intermed
+                                      res4 <- res4 %>% select(-cond, -intermed)
+                                      # And now normalise the model score
+                                      res4 <- res4 %>% 
+                                        group_by(pgroup, trialtype) %>% 
+                                        mutate(normed = meancesm/sum(meancesm))
+                                      
+                                      # LESION 2
+                                      # modelNorm2, group by pgroup and trialtype but not node3, then uAuB, to get the individual possibilities from which to sample. Then sample one as the likely setting for that whole world, and then the other vars get their score as usual
+                                      
+                                      # 96 obs of 4
+                                      les <- modelNorm2 %>% 
+                                        group_by(pgroup, trialtype, uAuB) %>% 
+                                        summarise(meancesm = mean(meancesm)) %>% 
+                                        filter(uAuB!='NANA') 
+                                      
+                                      # (Later) - guess we do need the node3 as a grouping variable
+                                      les3 <- modelNorm2 %>% 
+                                        group_by(pgroup, trialtype, node3, uAuB) %>% 
+                                        summarise(meancesm = mean(meancesm)) %>% 
+                                        filter(uAuB!='NANA') 
+                                      
+                                      # Node3 is removable if the later version doesn't work
+                                      justcond <- modelNorm2 %>% 
+                                        group_by(pgroup, trialtype, node3, uAuB) %>% 
+                                        summarise(meancond = mean(cond))
+                                      
+                                      # Now re-merge back in the cond
+                                      les2 <- merge(les, justcond, by= c("pgroup", "trialtype", "uAuB")) 
+                                      les4 <- merge(les3, justcond, by= c("pgroup", "trialtype", "node3", "uAuB")) # Later version with node3
+                                      
+                                      # A function to sample by slice_sample a setting of uAuB from each trialtype in each pgroup, by its conditional probability
+                                      myFun <- function(df) {
+                                        samp <- df %>% 
+                                          group_by(pgroup, trialtype, node3) %>% 
+                                          slice_sample(n=1, weight_by = meancond)
+                                        samp2 <- samp[,1:4]
+                                        samp2
+                                      }
+                                      
+                                      # Run this function n times (change n if you like)
+                                      n <- 10
+                                      ls <- replicate(n, myFun(les4)) 
+                                      
+                                      # Empty place to store the results
+                                      pl <- data.frame(matrix(ncol = 0, nrow = 192)) # 36 if no node3; 192 if yes
+                                      # But with the first two bits as standards
+                                      pl <- cbind(pl, ls[,1][1], ls[,1][2], ls[,1][3])
+                                      
+                                      # Now unlist the contents of ls into this empty df
+                                      # for (i in 1:n) {
+                                      #   j <- ls[,i]
+                                      #   for (g in 1:length(j)) {
+                                      #     h <- j[g]
+                                      #     pl <- cbind(pl, h)
+                                      #   }
+                                      # }
+                                      
+                                      # Now get samples into a df
+                                      for (i in 1:n) {
+                                        j <- ls[,i]
+                                        h <- j[4]
+                                        pl <- cbind(pl, h)
+                                      }
+                                      
+                                      # Pivot long
+                                      pl2 <- pl %>% pivot_longer(cols = -c(pgroup, trialtype, node3)) %>% select(-name)
+                                      # Remove 
+                                      pl2 <- pl2 %>% group_by(pgroup, trialtype, node3, value) %>% summarise(n=n())
+                                      # Then merge the model values back in? We have each situation's cesm score so should be able to bring it back then scale by that. But what node will this relate to? ASK NEIL -- STUCK
+                                      
+                                      # -------- Lesion 3 ------------
+                                      # TO DO!!!!
+                                      
+                                      # An odd little way to bring in realLat status, must be a better way
+                                      modelPlaceholder <- mp %>% 
+                                        filter(pgroup!=4) %>% 
+                                        na.omit() %>% 
+                                        group_by(pgroup, trialtype, node3, realLat, .drop = FALSE) %>% 
+                                        tally
+                                      
+                                      # For realLat, everything TRUE has been defined as such. 
+                                      # Everything else needs to be FALSE (currently some are na because we used .drop=F to get all the combinations).
+                                      modelPlaceholder <- modelPlaceholder %>% replace(is.na(.), FALSE) %>% select(-n)
+                                      
+                                      modelNorm <- merge(modelNorm, modelPlaceholder)
+                                      
+                                      
+                                      # ------------- 2. Summarise participant data in same format ---------------------
+                                      # Section to get all combinations of variables, left join the participant answers of each, 
+                                      # and tag those with whether their answers are coherent or not (isPerm)
+                                      
+                                      
+                                      # First set factors so we can use tally
+                                      data$pgroup <- as.factor(data$pgroup)
+                                      data$node3 <- as.factor(data$node3)
+                                      data$trialtype <- as.factor(data$trialtype)
+                                      data$isPerm <- as.factor(data$isPerm)
+                                      
+                                      # Some confusion over whether we want realLat or isPerm - and how to feed those things to the chart later
+                                      # We want both. realLat applies to both model and data, so is tagged here to model.
+                                      # isPerm is a data value so is tagged here to data. The combnorm takes them both to variable settings
+                                      
+                                      # Bring in the isPerm status of all the node answers actually given
+                                      dataPlaceholder <- data %>% # 214
+                                        na.omit() %>% 
+                                        group_by(pgroup, trialtype, node3, isPerm) %>% # prob no need for .drop because the isPerm val is the same for both values of the var
+                                        tally
+                                      
+                                      dataNorm <- data %>% # 289
+                                        group_by(pgroup, trialtype, node3, .drop=FALSE) %>% # Here we do need the .drop to get all the combinations
+                                        tally %>% 
+                                        mutate(prop=n/sum(n))
+                                      
+                                      # Merge and keep all the 288 combinations, adding the isPerm vals for the ones that got an answer
+                                      dataNorm <- merge(x=dataNorm, y=dataPlaceholder, all.x = T) %>% replace(is.na(.), FALSE) %>% select(1,2,3,6,4,5)
+                                      # This then used for likelihood calc
+                                      
+                                      
+                                      # ----------- 3. The actual merge! ------------ 
+                                      # 576 of 7 -- CLOSEST THING TO SINGLE PREDICTION PER NODE/EXPLANATION 
+                                      combNorm <- merge(x=dataNorm, y=modelNorm) %>% 
+                                        select(-wa, -n) %>% # Probably don't remove - need for lik
+                                        rename(cesm=normed, ppts=prop) %>% 
+                                        pivot_longer(cols = cesm:ppts, values_to = 'percent')
+                                      
+                                      # A version for NLL 
+                                      combNLL <- merge(x=dataNorm, y=modelNorm) %>% 
+                                        select(-isPerm, -realLat)
+                                      
+                                      combNLL0 <- merge(x=dataNorm, y=modelNorm0) %>% 
+                                        select(-isPerm, prop, wa)
+                                      
+                                      # save this as csv if you want it elsewhere
+                                      #write.csv(combNorm, 'combNorm.csv')
+                                      ```
+                                      
+                                      #### 4. 'No actual cause treatment'
+                                      Get this from separate data wrangling file of the model predictions. Need to repeat a lot of the same code as above so it's not a good structure.
+
+
+```{r, include=FALSE}
+modno <- read.csv('../model_data/tidied_predsnoact.csv') # 82656 of 31 , 110208 if 4 params
+modno$s <- as.character(modno$s)
+
+mpn <- modno[modno$s %in% params$stab, ]
+
+mpn$pgroup <- as.factor(mpn$pgroup)
+mpn$node3 <- as.factor(mpn$node3)
+mpn$trialtype <- as.factor(mpn$trialtype)
+
+# Take the mean of the 10 runs for each world setting, get conditional and weighted average
+modelNormn <- mpn %>% # 480 of 5 (cos separate value for each uAuB)
+  filter(pgroup!=4) %>% 
+  group_by(pgroup, trialtype, node3, uAuB, cond, .drop = FALSE) %>% 
+  summarise(meancesm = mean(cp)) %>% 
+  mutate(intermed = meancesm*cond) %>% 
+  group_by(pgroup, trialtype, node3) %>% # Now 288
+  summarise(wa = sum(intermed)) %>% 
+  mutate(normed = wa/sum(wa, na.rm = T))
+
+modelNorm0n <- mpn %>% # just pgroup4
+  filter(pgroup==4) %>% # 
+  group_by(trialtype, node3, uAuB, cond, .drop = FALSE) %>% 
+  summarise(meancesm = mean(cp)) %>% 
+  mutate(intermed = meancesm*cond) %>% 
+  group_by(trialtype, node3) %>% # Now 288
+  summarise(wa = sum(intermed)) %>% 
+  mutate(normed = wa/sum(wa, na.rm = T))
+
+combNLLn <- merge(x=dataNorm, y=modelNormn) %>% 
+  select(-isPerm, prop, wa)
+```
+  
+
+
+

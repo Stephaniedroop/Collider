@@ -1,0 +1,112 @@
+---
+title: "Lesions"
+output: html_document
+date: "2025-01-08"
+---
+
+# No inference
+
+It looks like people might not be doing the marginalisation and inference step for the unobserved variable. 
+So what are they doing?
+Two options for unobserved variables: 
+1) Assume they always happened.
+2) Assume same as paired observed variable (parent)
+
+
+
+Process: 
+Import one of the .Rdata for a particular sens and stability setting. Get it working, then run a script to do so for all. In this we can follow the per_s or the loglik script
+
+
+
+
+                                        
+```{r}                                        
+                                      
+                                      
+                                      
+                                      
+```                                      
+                                      
+```{r, include=FALSE}
+                                      
+                                      
+                                      # But we also need a version that keeps all the unobserved variables - 480 obs
+                                      modelNorm2 <- mp %>% # 480 of 5 (cos separate value for each uAuB)
+                                        filter(pgroup!=4) %>% 
+                                        group_by(pgroup, trialtype, node3, uAuB, cond, .drop = FALSE) %>% 
+                                        summarise(meancesm = mean(cp)) %>% 
+                                        # intermed is the thing that is added together to get the wa. Currently unnormalised
+                                        mutate(intermed = meancesm*cond) %>% 
+                                        mutate(temp = max(uAuB))
+                                      
+                                      # --------- Lesioning the model -------
+                                      # LESION 1
+                                      # Pick out the 'max permissable 1s' but then we need an index match or some other way to tag the corresponding cesm
+                                      dd <- modelNorm2 %>% 
+                                        ungroup() %>% 
+                                        group_by(pgroup,trialtype,node3) %>% 
+                                        summarise(maxuAuB = max(uAuB)) # ie picks 11 if it is there, and if not then 10, 01, etc
+                                      
+                                      # Now get the model predictions for those conditions only - but this results in zeroes sometimes so is no good
+                                      #res <- merge(dd, modelNorm2, by = c("pgroup", "trialtype", "node3")) %>% 
+                                      #filter(uAuB==maxuAuB) 
+                                      # So we need another step first - Same thing but keep only contentful model predictions first 
+                                      res2 <- merge(dd, modelNorm2, by = c("pgroup", "trialtype", "node3")) %>% 
+                                        filter(meancesm!=c(0,NA)) # 111 obs
+                                      
+                                      # THEN filter for the 'max allowable unobs vars to still get positive model score'
+                                      res3 <- res2 %>% group_by(pgroup,trialtype,node3) %>% summarise(maxuAuB = max(uAuB)) # 90 obs. 
+                                      # From that we bring in the model score again BUT WHAT TO DO ABOUT THE NODES - WHICH MODEL SCORE?
+                                      res4 <- merge(res3, modelNorm2, by = c("pgroup", "trialtype", "node3")) %>% filter(uAuB==maxuAuB) # 90 obs of 8
+                                      # What we now do is normalise those model predictions. The conditional probabilities can be removed, as can intermed
+                                      res4 <- res4 %>% select(-cond, -intermed)
+                                      # And now normalise the model score
+                                      res4 <- res4 %>% 
+                                        group_by(pgroup, trialtype) %>% 
+                                        mutate(normed = meancesm/sum(meancesm))
+                                      
+                                      
+```
+
+
+
+
+
+### Of actual data
+
+## Does the model fit differently between variable types? In observed vs unobserved variables
+
+How to do this:
+  - *high level*: condition on people selecting observed var, then try to fit model within that. 
+- *in detail*: 
+  1. in the likelihood calc, this means instead of the people's count of answers summing to 1 across all 4 variables, take only the counts for unobserved and observed, and normalise within those. The model predicted a score for the two consistent vars. Then we normalised it, then x people selected it for that trial. 
+2. Then we could sum the likelihood for observed and unobserved and compare to the one where we do the likelihood all in a oner. 
+3. Then we see whether we get a higher correlation over unobserved v unobserved.
+
+```{r}
+
+combNorm3_processed <- lapply(combNorm3, function(tbl) {
+  tbl %>%
+    group_by(trialtype, vartype) %>%
+    summarise(sum_nll = sum(nll, na.rm = TRUE),
+              .groups = "drop")
+})
+
+# Then test
+test <- combNorm3_processed[[200]]
+test <- combNorm3[[1]]
+# %>% summarise(sum_normalized_nll = sum(normalized_nll), .groups = "drop")
+
+index <- which(sapply(combNorm3, function(tbl) 
+  any(tbl$s == 0.7 & tbl$sens == 1)))
+
+forT <- combNorm3_processed[[index]]
+
+specific <- combNorm3[[which(sapply(combNorm3, function(tbl) 
+  any(tbl$s == desired_s_value & tbl$sens == desired_sens_value)))]]
+
+```
+
+In the elements of combNorm3, (see 'test' for an example), only two answers are permitted. When they are both of one vartype, the other one is necessarily NaN. These facets should be missed out when discussing.
+

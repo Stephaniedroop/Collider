@@ -1,0 +1,182 @@
+---
+title: "Log likelihood heatmap"
+output: html_document
+date: "2024-10-10"
+#params: 
+  #stab: 0.7
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+# Script takes the processed data from the collider ppt expt (`DATA.RDATA`)
+# (which was cleaned and sliced in `mainbatch_preprocessing.R`) 
+# and combines it with the preprocessed model predictions from `modpred_process1.R` (`tidied_preds3.csv`)
+```
+
+This code combines participant and model predictions to give a heatmap for all values of stability s and sensitivity. There is a separate doc called `combine_per_s.R` which generates a separate html for each value of stability parameter and visualises cesm against participants. But this one is all values of stability and sensitivity. A lot of the code is reused from that separate file and so this may be tidied or scrapped later.
+
+```{r, include=FALSE}
+load('../Data/Data.Rdata', verbose = T) # This is one big df, 'data', 3408 obs of 18 ie. 284 ppts
+mp <- read.csv('../model_data/tidied_preds3.csv') # 1322496 of 33
+
+mp$pgroup <- as.factor(mp$pgroup)
+mp$node3 <- as.factor(mp$node3)
+mp$trialtype <- as.factor(mp$trialtype)
+mp$sens <- as.factor(mp$sens)
+mp$structure <- as.factor(mp$structure)
+mp$E <- as.factor(mp$E)
+
+# Treat for actual causality (without this, heatmap yellowest at lowest value of each param)
+mp$cp[mp$vA!=mp$E & mp$node2=='A'] <- 0
+mp$cp[mp$vAu!=mp$E & mp$node2=='Au'] <- 0
+mp$cp[mp$vB!=mp$E & mp$node2=='B'] <- 0
+mp$cp[mp$vBu!=mp$E & mp$node2=='Bu'] <- 0
+
+# Note, these are similar to the modelNorm etc in 'combine_per_s' but these have to split out the s separately
+modelNorm <- mp %>%  # 96768 of 8
+  group_by(s, sens, pgroup, trialtype, E, node3, uAuB, cond) %>% # guess it's ok to not have .drop=F
+  summarise(meancesm = mean(cp)) %>%  # take the mean of the 10 model runs
+  mutate(intermed = meancesm*cond) %>% 
+  group_by(s, sens, pgroup, trialtype, E, node3) %>% 
+  summarise(wa = sum(intermed)) %>% 
+  mutate(normed = round(exp(wa)/sum(exp(wa), na.rm = T),3))
+
+modelPlaceholder <- mp %>% 
+  na.omit() %>% 
+  group_by(s, sens, pgroup, trialtype, node3, realLat, isLat, .drop = FALSE) %>% 
+  tally
+
+modelPlaceholder <- modelPlaceholder %>% replace(is.na(.), FALSE) %>% select(-n)
+modelNorm <- merge(modelNorm, modelPlaceholder)
+modelNorm <- modelNorm[, c(3:5, 7:10, 6, 1:2)]
+
+modelNorm <- modelNorm %>% 
+  mutate(structure = if_else(grepl("^c", trialtype), 'conjunctive', 'disjunctive'),
+         vartype = if_else(grepl(c("^Au|^Bu"), node3), 'un', 'obs'),
+         a1 = if_else(trialtype %in% c('c5', 'd7'), 'TRUE', 'FALSE'),
+         inf = if_else(realLat=='FALSE' & isLat=='TRUE', 'TRUE', 'FALSE')) # inf for 'inferrable'
+
+```
+
+
+Now summarise the ppt data in the same format:
+
+```{r, include=FALSE}
+# ------------- 2. Summarise participant data in same format ---------------------
+# Section to get all combinations of variables, left join the participant answers of each, 
+# and tag those with whether their answers are coherent or not (isPerm)
+
+
+# First set factors so we can use tally
+data$pgroup <- as.factor(data$pgroup)
+data$node3 <- as.factor(data$node3)
+data$trialtype <- as.factor(data$trialtype)
+data$isPerm <- as.factor(data$isPerm)
+
+# Some confusion over whether we want realLat or isPerm - and how to feed those things to the chart later
+# We want both. realLat applies to both model and data, so is tagged here to model.
+# isPerm is a data value so is tagged here to data. The combnorm takes them both to variable settings
+
+# Bring in the isPerm status of all the node answers actually given
+dataPlaceholder <- data %>% # 214
+  na.omit() %>% 
+  group_by(pgroup, trialtype, node3, isPerm) %>% # prob no need for .drop because the isPerm val is the same for both values of the var
+  tally
+
+dataNorm <- data %>% # 289
+  group_by(pgroup, trialtype, node3, .drop=FALSE) %>% # Here we do need the .drop to get all the combinations
+  tally %>% 
+  mutate(prop=n/sum(n))
+
+# Merge and keep all the 288 combinations, adding the isPerm vals for the ones that got an answer
+dataNorm <- merge(x=dataNorm, y=dataPlaceholder, all.x = T) %>% replace(is.na(.), FALSE) %>% select(1,2,3,6,4,5)
+# This then used for likelihood calc
+
+
+# ----------- 3. The actual merge! ------------ 
+combNorm <- merge(x=dataNorm, y=modelNorm) %>% 
+  select(-wa, -n) %>% # Probably don't remove - need for lik
+  rename(cesm=normed, ppts=prop) %>% 
+  pivot_longer(cols = cesm:ppts, values_to = 'percent')
+
+# The merge filters for permissable answers and so misses out all the zeroes
+combNorm2 <- merge(x=dataNorm, y=modelNorm) %>%
+  #select(-wa, -n) %>% 
+  rename(cesm=normed, ppts=prop) #%>% 
+  #filter(isPerm==TRUE)
+
+```
+
+## Likelihood heatmap
+In order to get the nll for all combinations of the stability parameter (0.6-0.99, 12 values) and the sensitivity parameter (0-1, 21 values) both grid searched, we need to slice and dice the df called combNorm2 into each combination of stability and sensitivity. 
+
+The next code section splits the data and applies a series of functions to calculate nll and then plot a heatmap.
+
+```{r, echo=FALSE}
+combNorm3 <- combNorm2 %>% 
+  group_split(s, sens) 
+
+# Large list
+combNorm3 <- lapply(combNorm3, function(tbl) {
+  tbl %>% 
+    mutate(nll = log(cesm)*n) 
+})
+
+# Save one tibble out the list as a test to see its structure. 84 obs of 18. 
+# Each node has 2 values typically (because 2 permitted only), and 4 for c5 and d7
+test <- combNorm3[[10]]
+
+nll_sums <- sapply(combNorm3, function(tbl) {
+  sum(tbl$nll[is.finite(tbl$nll)], na.rm = TRUE)
+})
+
+names(nll_sums) <- sapply(combNorm3, function(tbl) {
+  paste("s", unique(tbl$s), "sens", unique(tbl$sens), sep = "_")
+})
+
+nll_sums_tibble <- tibble(
+  tibble_name = names(nll_sums),
+  nll_sum = nll_sums
+)
+
+# First, let's extract the 's' and 'sens' values from the names
+nll_sums_tibble <- tibble(
+  tibble_name = names(nll_sums),
+  nll_sum = nll_sums
+) %>%
+  separate(tibble_name, into = c("s_prefix", "s", "sens_prefix", "sens"), sep = "_") %>%
+  select(s, sens, nll_sum) %>%
+  mutate(s = as.factor(s),
+         sens = as.factor(sens))
+
+max_nll <- nll_sums_tibble %>%
+  filter(is.finite(nll_sum)) %>%
+  slice_max(nll_sum, n = 1)
+
+# This is the heatmap of the sens and stability parameters
+p2 <- ggplot(nll_sums_tibble, aes(x = s, y = sens, fill = nll_sum)) +
+  geom_tile(width = 0.9, height = 0.9) +
+  geom_text(data = nll_sums_tibble %>% 
+              mutate(row_id = row_number()) %>% 
+              filter(row_id %% 5 == 0),
+            aes(label = round(nll_sum, 2)), 
+            color = "white", size = 3) +
+  scale_fill_viridis_c(option = "plasma") +
+  theme_minimal() +
+  labs(title = "Heatmap of 'nll' Sums",
+       x = "s",
+       y = "sens",
+       fill = "Sum of nll") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_fixed(ratio = 1)
+
+p2
+
+# Potential problems with all this: not split out for pgroup
+
+```
+
+From this, the best parameter setting is `r toString(max_nll)`. 
+
+For other, lesioned model predictions, hopefully we can add them to the same structure (combNorm2? ie before it is split into parameter combos). But unsure what to do about the parameters when finding the other lesioned models. 
+

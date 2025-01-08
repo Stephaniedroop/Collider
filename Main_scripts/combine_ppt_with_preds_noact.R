@@ -15,7 +15,7 @@ library(ggpmisc)
 #library(shiny)
 rm(list=ls())
 
-s_vals <- c(seq(0.6, 0.95, 0.05), seq(0.96, 0.99, 0.01)) 
+s_vals <- c(seq(0.3, 0.95, 0.05), seq(0.96, 0.99, 0.01)) 
 
 
 #-------- Combine model and participants, for each value of s -----------
@@ -27,7 +27,7 @@ s_vals <- c(seq(0.6, 0.95, 0.05), seq(0.96, 0.99, 0.01))
 run_for_s <- function(s) {
   # Set the s value in the global environment
   assign("s", s, envir = .GlobalEnv)
-  source('combine_per_s.R') 
+  source('combine_per_s_noact.R') 
 }
 
 # Run the function for each s value
@@ -40,8 +40,8 @@ lapply(s_vals, run_for_s)
 # Useful for thinking, but plots probably no good for main part of the paper. Uses the .Rdatas saved in Part 1
 
 lapply(s_vals, function(s) {
-  rmarkdown::render("visualise_per_s.Rmd", 
-                    output_file = paste0("../processed_data/", s, "_report.html"),
+  rmarkdown::render("visualise_per_s_noact.Rmd", 
+                    output_file = paste0("../processed_data/", s, "_report_noact.html"),
                     params = list(s = s))
 })
 
@@ -53,9 +53,9 @@ lapply(s_vals, function(s) {
 # Maybe remove the probs to the conj000 where people might be sensitive in the opposite way to what the model predicts
 
 # Generate new series of RMarkdown reports with lesions - still not sure how best to structure PROBABLY OLD
-lapply(unique(s_vals), function(stab.i) {
-  rmarkdown::render(input = 'combine_lesions.Rmd',
-                    params = list(stab = stab.i),
-                    output_file = paste0(stab.i, 'lesions.html'))
-  
-})
+# lapply(unique(s_vals), function(stab.i) {
+#   rmarkdown::render(input = 'combine_lesions.Rmd',
+#                     params = list(stab = stab.i),
+#                     output_file = paste0(stab.i, 'lesions.html'))
+#   
+# })

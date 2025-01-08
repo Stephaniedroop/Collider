@@ -26,6 +26,12 @@ mp$sens <- as.factor(mp$sens)
 mp$structure <- as.factor(mp$structure)
 mp$E <- as.factor(mp$E)
 
+# Treat for actual causality (without this, heatmap yellowest at lowest value of each param)
+mp$cp[mp$vA!=mp$E & mp$node2=='A'] <- 0
+mp$cp[mp$vAu!=mp$E & mp$node2=='Au'] <- 0
+mp$cp[mp$vB!=mp$E & mp$node2=='B'] <- 0
+mp$cp[mp$vBu!=mp$E & mp$node2=='Bu'] <- 0
+
 # Note, these are similar to the modelNorm etc in 'combine_per_s' but these have to split out the s separately
 modelNorm <- mp %>%  # 96768 of 8
   group_by(s, sens, pgroup, trialtype, E, node3, uAuB, cond) %>% # guess it's ok to not have .drop=F
@@ -56,7 +62,7 @@ modelNorm <- modelNorm %>%
 # Section to get modelNorm but for the direct dependency predictions
 mpdd <- read.csv('../model_data/tidied_predsdd.csv') # 512 0f 19
 
-mpdd$pgroup <- as.factor(mp$pgroup)
+mpdd$pgroup <- as.factor(mpdd$pgroup)
 mpdd$node <- as.factor(mpdd$node)
 mpdd$trialtype <- as.factor(mpdd$trialtype)
 mpdd$structure <- as.factor(mpdd$structure)

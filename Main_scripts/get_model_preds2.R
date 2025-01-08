@@ -12,7 +12,7 @@ library(tidyverse)
 
 # Other values set outside for now 
 N_cf <- 10000L # How many counterfactual samples to draw
-s_vals <- c(seq(0.6, 0.95, 0.05), seq(0.96, 0.99, 0.01)) # The old way was 0-1 but model fit was better towards the higher end so I redid just for that - redo if need
+s_vals <- c(seq(0.00, 0.95, 0.05), seq(0.96, 0.99, 0.01)) # The old way was 0-1 but model fit was better towards the higher end so I redid just for that - redo if need
 sens_vals <- seq(0.00, 1.00, 0.05)
 modelruns <- 10
 

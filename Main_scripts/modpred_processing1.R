@@ -11,7 +11,7 @@
 rm(list=ls())
 library(rjson)
 library(tidyverse)
-s_vals <- c(seq(0.6, 0.95, 0.05), seq(0.96, 0.99, 0.01)) 
+s_vals <- c(seq(0.00, 0.95, 0.05), seq(0.96, 0.99, 0.01)) 
 
 all <- read.csv('../model_data/allnew.csv') %>% replace(is.na(.), 0) # 322560 of 24
 

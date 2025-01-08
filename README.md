@@ -46,15 +46,29 @@ Processing behavioural experiment data (see folder `Experiment' for the JS code 
 
 Combining participant data with model predictions and assessing model fit:
 
-- `combine_ppt_with_preds.R` - combine predictions with participant data
-- `combine_lesions.Rmd`, `combine_per_s_oldplots.Rmd`, `combine_per_s.Rmd`, `combine_sens.Rmd`, `combine_summary_plots.Rmd`, `lesions_and_NLL.Rmd` - all these generate html pages to visualise the model predictions against the participant data, for each of the different parameter combinations. WIP. Undecided what will form narrative flow of paper. Masterscript takes precedence.
-- `modpred_processing.R` is old. Use any other variant that starts `modpred_process...` - some model lesions do not require a full rerun of the cesm model but can be done post hoc by cutting or changing parts of how the model scores and probabilities are normalised, conditioned on, inferred, or otherwise combined and used. WIP.
+- `combine_ppt_with_preds.R` - combine predictions with participant data. Itself is a small top level to run some further scripts:
+- `combine_per_s.R` - a script for further processing of model predictions, to combine each split per s value with the participant data and save as `[s]comb.Rdata` which is a set of dataframes for further plotting
+- `visualise_per_s.Rmd` - generate series of plots to visualise model predictions against participant data. Output seen as `../processed_data/[s]_report.html`. Probably none of these will make it to final paper.
+- `loglik_heatmap.Rmd` - Generates a heatmap to show which combination of parameters give best log likelihood (s=0.9, sens=0, ll=-2716). Best run cell by cell.
+
+For the model lesioned by NOT treating it for Actual Causality - i.e., a model that assigns all variable values a causal score, even ones that cannot logically contribute to the outcome (e.g. A=1 - A occurring - cannot be a cause of E not occurring), this preceding series is repeated with just the lines that set non-Actual causes to 0 commented out:
+
+- `combine_ppt_with_preds_noact.R` - combine predictions with participant data. Itself is a small top level to run some further scripts:
+- `combine_per_s_noact.R` - a script for further processing of model predictions, to combine each split per s value with the participant data and save as `[s]comb_noact.Rdata` which is a set of dataframes for further plotting
+- `visualise_per_s.Rmd` - generate series of plots to visualise model predictions against participant data. Output seen as `../processed_data/[s]_report_noact.html`. Probably none of these will make it to final paper.
+- `loglik_heatmap_noact.Rmd` - Generates a heatmap to show which combination of parameters give best log likelihood (s=0.9, sens=0, ll=-2716). Best run cell by cell.
 
 #### Non-core
 
 - `cesmheavyfunc.R` - an older, heavier, learning version of the CESM model, where everything is defined as variables and pulled out as dataframe rows. Can be easier to read.
 - `check_preds_plot.R` - plots to check the predictions.
 - `checkmodelvariance.R` - just a check that 10 runs of the model produce predictions with acceptable variance (they do).
+- `combine_summary_plots.Rmd` - overall what proportion of unobserved variables are chosen by ppts vs model and other summary plots. Probably none of these will make it to final paper.
+
+#### Old, don't use these
+
+- `combine_lesions.Rmd`, `combine_per_s_oldplots.Rmd`, `combine_per_s.Rmd`, `combine_sens.Rmd`, , `lesions_and_NLL.Rmd` - all these generate html pages to visualise the model predictions against the participant data, for each of the different parameter combinations. WIP. Undecided what will form narrative flow of paper. Masterscript takes precedence.
+- `modpred_processing.R` is old. Use any other variant that starts `modpred_process...` - some model lesions do not require a full rerun of the cesm model but can be done post hoc by cutting or changing parts of how the model scores and probabilities are normalised, conditioned on, inferred, or otherwise combined and used. WIP.
 
 ### FOLDER Experiment
 

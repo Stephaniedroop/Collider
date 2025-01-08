@@ -103,3 +103,21 @@ all$realLat[all$trialtype=='d5' & all$node2=='Au'] <- FALSE
 # write this as csv in case need it later 
 write.csv(all, '../model_data/tidied_predsdd.csv')
 
+
+
+# Section to get modelNorm but for the direct dependency predictions
+mpdd <- read.csv('../model_data/tidied_predsdd.csv') # 512 0f 19
+
+mpdd$pgroup <- as.factor(mpdd$pgroup)
+mpdd$node <- as.factor(mpdd$node)
+mpdd$trialtype <- as.factor(mpdd$trialtype)
+mpdd$structure <- as.factor(mpdd$structure)
+mpdd$E <- as.factor(mpdd$E)
+
+
+modelNormdd <- mpdd %>%  
+  group_by(pgroup, trialtype, node, Cause) %>% 
+  summarise(n = n()) %>% 
+  filter(pgroup==1, Cause==TRUE) # Just take 1 pgroup because it's meaningless
+
+# Now how to combine with ppt? Still need the actual values of the node
